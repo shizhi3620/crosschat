@@ -4,8 +4,7 @@
 
 Please **do not** open public GitHub issues for security vulnerabilities.
 
-Email the maintainer at **CONTACT@example.com** (replace with the published
-contact address before release) with:
+Email the maintainer at **crosschat.app@gmail.com** with:
 
 - a description of the issue and its impact,
 - reproduction steps,

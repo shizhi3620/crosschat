@@ -16,9 +16,9 @@
 | 分发 | Public（公开，全球区域；BYOK 需要用户自备火山方舟账号，离线演示全球可用） |
 | 版本更新说明 / What's new | First public release.（首发） |
 | 内容分级 | Everyone；不含用户生成内容社交/暴力/付费博彩等任何触发项 |
-| 隐私政策 URL | `https://<org>.github.io/crosschat/privacy.html`（C2c 交付后回填） |
-| 官网 | `https://<org>.github.io/crosschat/` |
-| 支持页 / 联系 | `https://<org>.github.io/crosschat/support.html`；联系邮箱 `<contact@example.com 替换为正式邮箱>` |
+| 隐私政策 URL | `https://shizhi3620.github.io/crosschat/privacy.html` |
+| 官网 | `https://shizhi3620.github.io/crosschat/` |
+| 支持页 / 联系 | `https://shizhi3620.github.io/crosschat/support.html`；联系邮箱 `crosschat.app@gmail.com` |
 | 单张用途（Single purpose） | 见 D 节，逐字粘贴 |
 | 权限说明（Permission justifications） | 见 E 节，逐字段粘贴 |
 | 素材 | icon 128×128、marquee promo 1400×560、截图 4 张（见 G 节） |
@@ -198,4 +198,4 @@ The extension does not send messages, schedule messages, click platform buttons,
 
 - manifest `name`/`description` 已改为 `__MSG_app_name__` / `__MSG_app_description__`：安装后英文 UI 用户看到 B 节名称，中文 UI 用户看到 C 节名称；商店 listing 需与这两个字符串逐字一致。
 - 安装后 chrome://extensions 显示名来源：`_locales/en/messages.json`（default_locale=en）与 `_locales/zh_CN/messages.json`。
-- 截图中 contact@example.com 仅为占位；正式联系邮箱在 C2d 打包时经 `src/config/telemetry.config.js` 的 `CONTACT_EMAIL` 注入，仓库里继续保留占位。
+- 截图中 contact@example.com 仅为占位；正式联系邮箱 `crosschat.app@gmail.com` 已写入 `src/config/telemetry.config.js` 的 `CONTACT_EMAIL`（公开联系邮箱，非密钥）；商店包内页面运行时即显示真值。

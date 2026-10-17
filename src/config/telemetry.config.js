@@ -21,4 +21,4 @@ export const TELEMETRY = {
 export const WAITLIST_FORM_URL = '';
 
 /** onboarding/options 里的联系邮箱占位（board 可在落地页上线后替换） */
-export const CONTACT_EMAIL = 'contact@example.com';
+export const CONTACT_EMAIL = 'crosschat.app@gmail.com';
