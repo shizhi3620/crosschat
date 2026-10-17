@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>隐私政策 · Privacy Policy — 跨海聊 CrossChat</title>
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+<div class="langbar"><div class="container">
+  <button data-lang="zh">中文</button><button data-lang="en">English</button>
+</div></div>
+
+<div class="legal">
+<!-- ============ 中文 ============ -->
+<div class="zh">
+<h1>隐私政策</h1>
+<p class="lead">跨海聊 CrossChat 浏览器扩展 v1.0.0 · 生效日期：2026-10-16</p>
+<div class="note info">一句话版本：你的买家消息、API Key 和店铺数据只存在你自己的设备上；我们不收内容、不做广告、不卖数据。匿名使用计数可一键关闭。</div>
+
+<div class="toc">
+<a href="#what">产品做什么</a><a href="#local">本地数据</a><a href="#network">网络请求</a>
+<a href="#telemetry">匿名统计</a><a href="#rights">你的权利</a><a href="#contact">联系我们</a>
+</div>
+
+<h2 id="what">1. 产品做什么（单一用途）</h2>
+<p>本扩展只有一个用途：在你自己的客服网页里，帮你<strong>草拟</strong>买家消息回复。它捕获你主动选中的买家消息，进行翻译、知识库匹配和草拟，把草稿填入页面已有的回复框。<strong>扩展从不点击发送、不定时发消息、不执行任何账号操作</strong>——每条回复都由你本人审核并通过平台原生按钮发出。</p>
+
+<h2 id="local">2. 只存在你设备上的数据</h2>
+<p>以下数据通过浏览器的本地存储（chrome.storage.local）保存，<strong>不上传到我们的任何服务器</strong>，卸载扩展时由浏览器一并清除：</p>
+<table>
+<thead><tr><th>数据</th><th>内容</th><th>删除方式</th></tr></thead>
+<tbody>
+<tr><td>设置</td><td>运行模式、站点授权列表、模型参数、单价配置</td><td>卸载，或设置页重置</td></tr>
+<tr><td>BYOK API Key</td><td>你自填的火山方舟 API Key，仅以浏览器本地存储保存</td><td>设置页删除或卸载</td></tr>
+<tr><td>知识库</td><td>你自己的售后 FAQ（首次安装时用扩展包内置文件播种，可自行编辑）</td><td>设置页编辑/清空或卸载</td></tr>
+<tr><td>会话与计量历史</td><td>处理时间、分级、token 用量、采纳情况（不含密钥；消息正文仅在近期会话记录中）</td><td>看板「清空计量数据」或卸载</td></tr>
+<tr><td>等候名单邮箱</td><td>v1.0.0 中你登记的邮箱<strong>仅保存在本机、不会被上传或发送</strong></td><td>卸载即清除</td></tr>
+<tr><td>匿名统计设置</td><td>安装时本机随机生成的客户端 ID、每日活跃去重日期、开关状态</td><td>设置页一键关闭；卸载即清除</td></tr>
+</tbody>
+</table>
+<p>扩展<strong>不需要注册账号</strong>，不收集你的姓名、邮箱（自愿登记的除外，且见上条）、电话或付款信息。</p>
+
+<h2 id="network">3. 扩展发起的网络请求（完整清单）</h2>
+<h3>3.1 模型请求：直发服务商，不经过我们</h3>
+<p>仅当你配置了 BYOK（自带 Key）并主动点「翻译 / 草拟回复」时，浏览器会把买家消息文本和相关知识库片段<strong>直接</strong>发送到火山方舟（Volcengine Ark，<code>ark.cn-beijing.volces.com</code>，位于中国大陆），使用的是你自己的 API Key。请求不经过、不中转、不留存在扩展作者的任何服务器上。该处理受火山引擎/字节跳动的隐私政策约束。在离线演示模式下不会发起任何模型请求。买家消息中的邮箱、电话、银行卡号、地址等会在发送前自动脱敏，并在你采纳草稿时在本机还原。</p>
+<h3>3.2 匿名使用统计：Google Analytics 4（默认开启，可关闭）</h3>
+<p>扩展通过 Google Analytics Measurement Protocol v2 上报少量匿名计数，用于判断产品是否有人用、是否有用。详见<a href="#telemetry">第 4 节</a>。</p>
+<h3>3.3 不会发生的请求</h3>
+<ul>
+<li>扩展不读取你访问的网页：助手只在你<strong>明确添加并授权</strong>的站点上注入，移除授权立即停止注入；</li>
+<li>不请求浏览器 Cookie、不同步账号、不收集浏览历史；</li>
+<li>内置知识库种子文件是扩展包内的本地文件，不从网络下载。</li>
+</ul>
+
+<h2 id="telemetry">4. 匿名统计的精确内容</h2>
+<p>事件采用代码内白名单，只有以下 4 个事件、3 个枚举字段，任何其他字段在发送前即被丢弃：</p>
+<table>
+<thead><tr><th>事件</th><th>含义</th><th>附带字段</th></tr></thead>
+<tbody>
+<tr><td><code>install</code></td><td>首次安装（计数）</td><td>无</td></tr>
+<tr><td><code>daily_active</code></td><td>每个随机客户端每天至多一条</td><td>无</td></tr>
+<tr><td><code>draft_generated</code></td><td>生成了一条草稿</td><td rowspan="2"><code>level</code>: L0/L1/L2（模型级别）；<code>platform_class</code>: tiktok/shopee/amazon/gmail/other（仅按域名粗分类）；<code>mode</code>: demo/byok/hosted</td></tr>
+<tr><td><code>draft_adopted</code></td><td>一条草稿被采纳填入回复框</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>绝不包含</strong>：消息正文、译文、知识库内容、个人信息、完整网址、页面标题、API Key。</li>
+<li>客户端 ID 是安装时随机生成的 UUID，不与任何身份关联；我们不设置 Cookie（Measurement Protocol 不依赖页面 Cookie）。Google 作为接收方可能获得请求来源 IP（用于其标准数据处理），请同时参阅 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隐私政策</a>。</li>
+<li>关闭方式：设置页第 7 节取消勾选「发送匿名使用统计」，关闭后<strong>不产生任何统计请求</strong>。</li>
+<li>扩展包内的 Measurement Protocol 密钥只能向我们的 GA 资源<strong>写入</strong>上述事件，不能读取任何数据。</li>
+</ul>
+
+<h2 id="website">5. 本网站与商店页面</h2>
+<p>本站点通过 GitHub Pages 托管；GitHub 可能按<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">其隐私政策</a>记录对页面的访问日志。本站点自身<strong>不设置 Cookie、不运行统计脚本、不加载第三方跟踪资源</strong>。扩展通过 Chrome Web Store 分发，安装、评分等由 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隐私政策</a>覆盖。</p>
+
+<h2 id="rights">6. 你的选择与权利</h2>
+<ul>
+<li><strong>关闭统计</strong>：设置页一键关闭，立即生效；</li>
+<li><strong>删除数据</strong>：看板清空计量数据、设置页删除 Key/站点，或直接卸载扩展（本地数据随之全部删除）；</li>
+<li><strong>查询/投诉</strong>：通过下方邮箱联系，我们在 30 天内回复；</li>
+<li>本扩展不面向 13 岁以下儿童，不主动收集儿童信息。</li>
+</ul>
+
+<h2 id="changes">7. 政策变更</h2>
+<p>实质性变更会在本页更新并提高版本号/生效日期；如新增任何数据收集，会在扩展更新说明中明示。</p>
+<table>
+<thead><tr><th>版本</th><th>日期</th><th>说明</th></tr></thead>
+<tbody><tr><td>v1.0.0</td><td>2026-10-16</td><td>首次公开发布版本。</td></tr></tbody>
+</table>
+
+<h2 id="contact">8. 联系</h2>
+<p>运营方：<span class="fill">【上架前填写：开发者/主体名称】</span><br />
+隐私问题、数据删除请求：<a href="mailto:CONTACT@example.com">CONTACT@example.com</a> <span class="fill">【上架前替换为正式邮箱】</span></p>
+</div>
+
+<!-- ============ English ============ -->
+<div class="en">
+<h1>Privacy Policy</h1>
+<p class="lead">CrossChat browser extension v1.0.0 · Effective: 2026-10-16</p>
+<div class="note info">In one sentence: your buyer messages, API key and store data stay on your own device; we collect no message content, run no ads, and never sell data. Anonymous usage counts can be switched off in one click.</div>
+
+<div class="toc">
+<a href="#what">What it does</a><a href="#local">Local data</a><a href="#network">Network requests</a>
+<a href="#telemetry">Usage stats</a><a href="#rights">Your rights</a><a href="#contact">Contact</a>
+</div>
+
+<h2 id="what">1. What the extension does (single purpose)</h2>
+<p>The extension has one purpose: helping you <strong>draft</strong> replies to buyer messages inside your own customer-service web pages. It captures a buyer message you actively select, translates it, matches it against your knowledge base, and drafts a reply which it fills into the page's existing reply box. <strong>It never clicks send, never schedules messages, and performs no actions in your accounts</strong> — every reply is reviewed and sent manually by you, using the platform's own controls.</p>
+
+<h2 id="local">2. Data stored only on your device</h2>
+<p>The data below is kept in the browser's local storage (chrome.storage.local). It is <strong>never uploaded to any server of ours</strong> and is removed by the browser when you uninstall the extension:</p>
+<table>
+<thead><tr><th>Data</th><th>Contents</th><th>How to delete</th></tr></thead>
+<tbody>
+<tr><td>Settings</td><td>Run mode, authorized-site list, model parameters, unit-price config</td><td>Reset in options, or uninstall</td></tr>
+<tr><td>BYOK API key</td><td>Your Volcengine Ark API key, stored only in local browser storage</td><td>Remove in options, or uninstall</td></tr>
+<tr><td>Knowledge base</td><td>Your own after-sales FAQ (seeded once from a file packaged inside the extension; fully editable)</td><td>Edit/clear in options, or uninstall</td></tr>
+<tr><td>Conversation &amp; usage history</td><td>Timestamps, routing level, token usage, adoption metrics (recent message text may appear in session history; never your key)</td><td>"Clear metering data" on the dashboard, or uninstall</td></tr>
+<tr><td>Waitlist email</td><td>In v1.0.0 an email you register <strong>stays on this device only; it is never uploaded or sent</strong></td><td>Removed on uninstall</td></tr>
+<tr><td>Telemetry settings</td><td>Random per-install client UUID, daily-active dedup date, opt-out state</td><td>One-click opt-out in options; removed on uninstall</td></tr>
+</tbody>
+</table>
+<p>The extension <strong>does not require an account</strong> and does not collect your name, email (apart from the voluntary local-only registration above), phone number, or payment information.</p>
+
+<h2 id="network">3. Every network request the extension makes</h2>
+<h3>3.1 Model requests — sent directly to the provider, never through us</h3>
+<p>Only when you have configured BYOK with your own key and you actively click Translate/Draft, the browser sends the buyer message and relevant knowledge-base snippets <strong>directly</strong> to Volcengine Ark (<code>ark.cn-beijing.volces.com</code>, hosted in mainland China) using your own API key. These requests do not pass through, and are not stored on, any server operated by the extension developer. They are subject to Volcengine/ByteDance's own privacy policy. The offline demo mode makes no model requests. Email addresses, phone numbers, card numbers and postal addresses detected in buyer messages are masked before sending and restored locally when you adopt a draft.</p>
+<h3>3.2 Anonymous usage statistics — Google Analytics 4 (on by default, opt-out available)</h3>
+<p>A small set of anonymous counters is sent via Google Analytics Measurement Protocol v2, solely to assess whether the product is used and useful. See <a href="#telemetry">section 4</a>.</p>
+<h3>3.3 Requests that never happen</h3>
+<ul>
+<li>The extension does not read the web pages you visit: the assistant is injected only on sites <strong>you explicitly add and authorize</strong>, and injection stops immediately when you remove a site;</li>
+<li>It does not request browser cookies, account sync, or browsing history;</li>
+<li>The bundled knowledge-base seed is a local file inside the extension package, never downloaded.</li>
+</ul>
+
+<h2 id="telemetry">4. Exactly what the usage statistics contain</h2>
+<p>Events are restricted by a code-level whitelist to the 4 events and 3 enumerated fields below; any other field is dropped before sending:</p>
+<table>
+<thead><tr><th>Event</th><th>Meaning</th><th>Parameters</th></tr></thead>
+<tbody>
+<tr><td><code>install</code></td><td>First install (counter)</td><td>none</td></tr>
+<tr><td><code>daily_active</code></td><td>At most one per random client per UTC day</td><td>none</td></tr>
+<tr><td><code>draft_generated</code></td><td>A draft was generated</td><td rowspan="2"><code>level</code>: L0/L1/L2 (model tier); <code>platform_class</code>: tiktok/shopee/amazon/gmail/other (coarse hostname classification only); <code>mode</code>: demo/byok/hosted</td></tr>
+<tr><td><code>draft_adopted</code></td><td>A draft was adopted into the reply box</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Never included</strong>: message text, translations, knowledge-base content, personal data, full URLs, page titles, or API keys.</li>
+<li>The client ID is a random UUID generated at install, linked to no identity. We set no cookies (Measurement Protocol does not rely on page cookies). Google, as the receiving party, may see the request source IP under its standard data processing; see also the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
+<li>To opt out: uncheck "Send anonymous usage statistics" in section 7 of the options page. After opt-out <strong>no statistics requests are made</strong>.</li>
+<li>The Measurement Protocol secret packaged in the extension can only <strong>write</strong> these events to our analytics property; it cannot read data.</li>
+</ul>
+
+<h2 id="website">5. This website and the store listing</h2>
+<p>This site is hosted on GitHub Pages; GitHub may log page requests under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">its privacy statement</a>. The site itself <strong>sets no cookies, runs no analytics scripts, and loads no third-party tracking resources</strong>. The extension is distributed through the Chrome Web Store, where installs and reviews are covered by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
+
+<h2 id="rights">6. Your choices and rights</h2>
+<ul>
+<li><strong>Opt out of statistics</strong>: one toggle in the options page, effective immediately;</li>
+<li><strong>Delete data</strong>: clear metering data on the dashboard, remove your key and sites in options, or simply uninstall the extension (all local data is removed);</li>
+<li><strong>Access requests / complaints</strong>: email the address below; we respond within 30 days;</li>
+<li>The extension is not directed to children under 13 and does not knowingly collect children's information.</li>
+</ul>
+
+<h2 id="changes">7. Changes</h2>
+<p>Material changes will be posted here with a new version number and effective date; any new data collection will also be stated explicitly in extension release notes.</p>
+<table>
+<thead><tr><th>Version</th><th>Date</th><th>Note</th></tr></thead>
+<tbody><tr><td>v1.0.0</td><td>2026-10-16</td><td>First public release.</td></tr></tbody>
+</table>
+
+<h2 id="contact">8. Contact</h2>
+<p>Operator: <span class="fill">[fill before publishing: developer/entity name]</span><br />
+Privacy questions and deletion requests: <a href="mailto:CONTACT@example.com">CONTACT@example.com</a> <span class="fill">[replace with a real inbox before publishing]</span></p>
+</div>
+</div>
+</body>
+<script src="assets/lang.js"></script>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>CrossChat 演示页（模拟店铺聊天）</title>
+  <style>
+    body { margin: 0; font: 13px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1f2328; }
+    .wrap { max-width: 720px; margin: 24px auto; }
+    h1 { font-size: 18px; }
+    .scenarios { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+    button.s { border: 1px solid #1f6feb; color: #1f6feb; background: #fff; border-radius: 16px; padding: 5px 12px; cursor: pointer; font-size: 12px; }
+    .chat { background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #d0d7de; }
+    .chat .top { background: #1f6feb; color: #fff; padding: 10px 14px; font-weight: 600; }
+    #chatLog { padding: 14px; min-height: 280px; max-height: 420px; overflow: auto; }
+    .msg { max-width: 75%; padding: 8px 12px; border-radius: 10px; margin: 8px 0; white-space: pre-wrap; }
+    .buyer { background: #e3f0ff; margin-left: auto; }
+    .me { background: #f0f0f0; }
+    .meta { font-size: 11px; color: #6e7781; margin-bottom: 2px; }
+    .buyer-wrap { text-align: right; }
+    .composer { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #eaeef2; background: #fafbfc; }
+    textarea { flex: 1; border: 1px solid #d0d7de; border-radius: 8px; padding: 8px; font: inherit; resize: none; height: 42px; }
+    .send { border: none; background: #1f6feb; color: #fff; border-radius: 8px; padding: 0 18px; cursor: pointer; }
+    .hint { color: #6e7781; font-size: 12px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>跨海聊 CrossChat · 模拟店铺聊天页（通用演示）</h1>
+    <div class="hint">
+      右下角「跨海聊」即扩展浮动部件（与真实页面同一套代码）。点下面任一情景把买家消息灌入部件，
+      然后在部件里点「翻译」或「草拟回复」，再「采纳并填入发送框」——扩展只填框，不会点击发送。
+    </div>
+    <div class="scenarios">
+      <button class="s" data-n="1">① 英文 · 物流 FAQ（期望 L0）</button>
+      <button class="s" data-n="2">② 英文 · A-to-Z 纠纷+邮箱（期望 L2/PII 脱敏）</button>
+      <button class="s" data-n="3">③ 中文 · 尺码咨询（常规 L1）</button>
+      <button class="s" data-n="4">④ 英文 · 翻译任务</button>
+    </div>
+    <div class="chat">
+      <div class="top">店铺聊天（模拟） · 买家：emma_b_8821</div>
+      <div id="chatLog"></div>
+      <div class="composer">
+        <textarea id="shopInput" placeholder="这是模拟的平台发送框：采纳草稿会填到这里，由你亲自点发送"></textarea>
+        <button class="send" id="shopSend" type="button">发送</button>
+      </div>
+    </div>
+    <p class="hint">合规拦截演示：在 BYOK 模式下若模型草稿含外链/联系方式/索评利诱/站外支付，部件会标红禁止填入（规则层单测覆盖全部 block 用例）。</p>
+  </div>
+  <script type="module" src="demo.js"></script>
+</body>
+</html>

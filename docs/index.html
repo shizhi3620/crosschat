@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>跨海聊 CrossChat — AI 客服回复草拟助手（只草拟，不代发）</title>
+<meta name="description" content="在你自己的客服后台用 AI 分级草拟多语种回复：翻译、知识库引用、合规与 PII 护栏。只草拟、由你人工点发送。BYOK 或离线演示，数据留在本机。" />
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+<div class="langbar"><div class="container">
+  <button data-lang="zh">中文</button><button data-lang="en">English</button>
+</div></div>
+
+<nav class="nav"><div class="container">
+  <a class="brand" href="index.html">跨海聊 CrossChat</a>
+  <div class="links">
+    <a href="#features" class="zh">功能</a><a href="#features" class="en">Features</a>
+    <a href="#how" class="zh">怎么用</a><a href="#how" class="en">How it works</a>
+    <a href="support.html">FAQ</a>
+    <a href="https://github.com/shizhi3620/crosschat" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<!-- ============ 中文 ============ -->
+<div class="zh">
+<header class="hero">
+  <div class="container">
+    <span class="badge-draft">只草拟 · 你亲自点发送，绝不自动回复</span>
+    <h1>跨海聊 CrossChat</h1>
+    <p class="sub">在你自己的客服后台，用 AI 分级草拟多语种买家回复：翻译、知识库引用、合规与 PII 护栏。数据默认只在本机。</p>
+    <a class="btn" href="support.html">从 Chrome Web Store 安装（审核中，详见 FAQ）</a>
+    <a class="btn ghost" href="support.html">安装与常见问题</a>
+    <div class="meta">免费（上线验证期）· Chrome 110+ · 无需注册 · 支持 BYOK 与离线演示</div>
+  </div>
+</header>
+
+<section class="block" id="features"><div class="container">
+  <h2>为跨境客服设计</h2>
+  <p class="lead">不替你说话，只让你回复得更快、更稳。</p>
+  <div class="grid">
+    <div class="card3"><h3>智能分级，省钱省时</h3><p>常规 FAQ 走本地即时缓存，日常问题用快速模型，只有纠纷、强烈负面等难单才调用旗舰模型。</p></div>
+    <div class="card3"><h3>知识库引用</h3><p>草稿标注引用了哪一条售后 KB（物流、退换货、尺码、支付），发送前逐条可核对。</p></div>
+    <div class="card3"><h3>多语翻译与草拟</h3><p>买家消息自动翻译，按买家语言草拟回复，覆盖跨境会话场景。</p></div>
+    <div class="card3"><h3>PII 入模前脱敏</h3><p>邮箱、电话、银行卡号、地址在发送给模型前自动脱敏，采纳草稿时在本机还原。</p></div>
+    <div class="card3"><h3>合规护栏</h3><p>站外支付、交换联系方式、好评利诱、违规承诺等风险草稿会被标红甚至禁止填入。</p></div>
+    <div class="card3"><h3>本地用量看板</h3><p>处理量、估算模型成本、L0/L1/L2 占比、采纳率、首响中位数——全部本机计算。</p></div>
+    <div class="card3"><h3>按需授权，不授权不注入</h3><p>不申请「读取所有网站数据」。你添加哪个站点才注入哪个，随时可撤。</p></div>
+    <div class="card3"><h3>BYOK：Key 不出本机</h3><p>填入你自己的火山方舟 Key，请求浏览器直发服务商，不经过我们的服务器；也可只用离线演示。</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="shots"><div class="container">
+  <h2>实际界面（真实产品渲染）</h2>
+  <p class="lead">演示数据，无真实买家信息。</p>
+  <div class="shots">
+    <img src="assets/img/ss-1-inbox-assistant.png" alt="卖家收件箱中草拟差评纠纷回复：L2 升级、PII 脱敏、人工发送" />
+    <img src="assets/img/ss-2-demo-l2-pii.png" alt="离线演示页：纠纷+邮箱场景的完整处理流程" />
+    <img src="assets/img/ss-3-dashboard.png" alt="本地用量与成本看板" />
+    <img src="assets/img/ss-4-onboarding.png" alt="首次引导：演示、站点授权、BYOK 与隐私说明" />
+  </div>
+</div></section>
+
+<section class="block" id="how"><div class="container">
+  <h2>三步开始</h2>
+  <ol class="steps">
+    <li><strong>安装并看 30 秒演示</strong>——内置模拟收件箱，无需 Key、不连外网，先确认它怎么工作。</li>
+    <li><strong>添加并授权你的客服站点</strong>——按需逐个授权；需要真实草拟时，可选填入你自己的火山方舟 API Key。</li>
+    <li><strong>选中买家消息 → 翻译 / 草拟 → 审核修改 → 你亲自点平台的发送按钮。</strong></li>
+  </ol>
+  <div class="note ok">硬边界：扩展不会点击任何平台的发送按钮、不会定时发消息、不会执行账号操作。AI 生成内容一律标记为草稿。</div>
+  <div class="note info">中国大陆使用：安装时需能访问 Chrome Web Store；安装后的日常使用直连火山方舟国内端点，离线演示完全本地运行。详见 <a href="support.html">FAQ</a>。</div>
+</div></section>
+
+<section class="block" id="faq-short"><div class="container">
+  <h2>常见问题速览</h2>
+  <details><summary>收费吗？</summary><p>验证期完全免费；BYOK 的模型费用由你直接与火山引擎结算。</p></details>
+  <details><summary>没有 API Key 能用吗？</summary><p>可以，内置离线演示包含 4 个场景，跑通完整流程且不联网。</p></details>
+  <details><summary>收集我的消息内容吗？</summary><p>不。BYOK 内容从浏览器直发模型服务商；匿名统计只含事件计数和枚举字段，可在设置里一键关闭。详见<a href="privacy.html">隐私政策</a>。</p></details>
+  <details><summary>支持哪些站点？</summary><p>你授权的卖家后台、客服 CRM 和网页邮箱，支持自定义域名；默认零站点访问。</p></details>
+  <p style="margin-top:16px"><a href="support.html">查看全部 11 个 FAQ →</a></p>
+</div></section>
+</div>
+
+<!-- ============ English ============ -->
+<div class="en">
+<header class="hero">
+  <div class="container">
+    <span class="badge-draft">Drafts only — you always click send; it never auto-replies</span>
+    <h1>CrossChat</h1>
+    <p class="sub">AI-tiered multilingual drafting for seller chats, right inside your own customer-service pages: translation, knowledge-base citations, compliance and PII guardrails. Your data stays local by default.</p>
+    <a class="btn" href="support.html">Install from the Chrome Web Store (under review, see FAQ)</a>
+    <a class="btn ghost" href="support.html">Setup &amp; FAQ</a>
+    <div class="meta">Free during launch validation · Chrome 110+ · No sign-up · BYOK or offline demo</div>
+  </div>
+</header>
+
+<section class="block" id="features"><div class="container">
+  <h2>Built for cross-border support</h2>
+  <p class="lead">It doesn't talk for you — it helps you reply faster and more safely.</p>
+  <div class="grid">
+    <div class="card3"><h3>Smart triage</h3><p>Routine FAQs are served from an instant local cache, everyday questions use a fast model, and a stronger model is reserved for disputes and strongly negative messages.</p></div>
+    <div class="card3"><h3>Knowledge-base citations</h3><p>Drafts cite the exact after-sales KB entry used (shipping, returns, sizing, payment), so every claim is verifiable before you send.</p></div>
+    <div class="card3"><h3>Translation &amp; bilingual drafts</h3><p>Buyer messages are translated and replies are drafted in the buyer's language.</p></div>
+    <div class="card3"><h3>PII masked before the model</h3><p>Emails, phone numbers, card numbers and addresses are masked before any model call and restored locally when you adopt a draft.</p></div>
+    <div class="card3"><h3>Compliance guardrails</h3><p>Risky drafts — off-platform payment, exchanged contacts, review incentives, policy-violating promises — are flagged or blocked from the reply box.</p></div>
+    <div class="card3"><h3>Local usage dashboard</h3><p>Volume, estimated cost, L0/L1/L2 mix, adoption rate and median first response — all computed on your device.</p></div>
+    <div class="card3"><h3>Per-site authorization</h3><p>No "read all websites" permission. The assistant is injected only on sites you add and grant; revocable at any time.</p></div>
+    <div class="card3"><h3>BYOK: key never leaves your device</h3><p>Bring your own Volcengine Ark key; requests go browser-to-provider through no server of ours. Or just use the offline demo.</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="shots-en"><div class="container">
+  <h2>Real interface (authentic renders)</h2>
+  <p class="lead">Demo data — no real buyer information.</p>
+  <div class="shots">
+    <img src="assets/img/ss-1-inbox-assistant.png" alt="Drafting a dispute reply in a seller inbox: L2 escalation, PII masking, human sends" />
+    <img src="assets/img/ss-2-demo-l2-pii.png" alt="Offline demo page: full pipeline for a dispute-with-email scenario" />
+    <img src="assets/img/ss-3-dashboard.png" alt="Local usage and cost dashboard" />
+    <img src="assets/img/ss-4-onboarding.png" alt="Onboarding: demo, per-site grants, BYOK and privacy notes" />
+  </div>
+</div></section>
+
+<section class="block" id="how"><div class="container">
+  <h2>Start in three steps</h2>
+  <ol class="steps">
+    <li><strong>Install and take the 30-second demo</strong> — a built-in simulated inbox, no key and no network, shows exactly how it works.</li>
+    <li><strong>Add and authorize your customer-service sites</strong> — grant per domain; optionally add your own Volcengine Ark API key when you want real drafts.</li>
+    <li><strong>Select a buyer message → Translate / Draft → review and edit → click the platform's send button yourself.</strong></li>
+  </ol>
+  <div class="note ok">Hard boundary: the extension never clicks a platform send button, never schedules messages, and takes no account actions. Every AI output is marked as a draft.</div>
+  <div class="note info">Mainland China: installation requires Chrome Web Store access; day-to-day use goes directly to Volcengine's domestic endpoint, and the demo runs fully locally. See the <a href="support.html">FAQ</a>.</div>
+</div></section>
+
+<section class="block" id="faq-short-en"><div class="container">
+  <h2>Quick FAQ</h2>
+  <details><summary>What does it cost?</summary><p>Free during validation; BYOK model charges are settled directly between you and Volcengine.</p></details>
+  <details><summary>Can I use it without an API key?</summary><p>Yes — the built-in offline demo covers four scenarios and runs the full pipeline with no network.</p></details>
+  <details><summary>Do you collect message content?</summary><p>No. BYOK content goes browser-to-provider directly; anonymous statistics contain event counters and enum fields only and can be switched off in one click. See the <a href="privacy.html">Privacy Policy</a>.</p></details>
+  <details><summary>Which sites are supported?</summary><p>Seller backends, support CRMs and webmail you authorize, including custom domains — zero site access by default.</p></details>
+  <p style="margin-top:16px"><a href="support.html">All 11 FAQ entries →</a></p>
+</div></section>
+</div>
+
+<footer><div class="container">
+  <span>© 2026 <span class="fill">【developer name】</span></span>
+  <a href="privacy.html" class="zh">隐私政策</a><a href="privacy.html" class="en">Privacy</a>
+  <a href="terms.html" class="zh">服务条款</a><a href="terms.html" class="en">Terms</a>
+  <a href="support.html">FAQ</a>
+  <span class="right">v1.0.0</span>
+</div></footer>
+</body>
+<script src="assets/lang.js"></script>
+</html>

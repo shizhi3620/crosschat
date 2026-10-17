@@ -1,0 +1,14 @@
+{
+  "name": "crosschat-mv3",
+  "version": "1.0.0",
+  "private": true,
+  "description": "跨海聊 CrossChat — 跨境电商站内信 AI 助手 Chrome MV3 插件 MVP（Ark 分级路由/知识库/合规引擎，BYOK+演示双模式）",
+  "type": "module",
+  "scripts": {
+    "test": "node test/run-tests.mjs",
+    "check": "node test/check-syntax.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

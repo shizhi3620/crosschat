@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>欢迎使用跨海聊 CrossChat</title>
+  <link rel="stylesheet" href="onboarding.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>跨海聊 CrossChat <span class="ver" id="ver"></span></h1>
+      <p class="tagline">在你自己的客服后台，用 AI 分级草拟多语种回复。<b>只草拟、由你人工点发送，绝不自动回复。</b></p>
+    </header>
+
+    <section class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h2>30 秒看演示（无需 Key、不连外网）</h2>
+          <p>在扩展自带的模拟收件箱里试：捕获买家消息 → 翻译 / AI 草拟 → 合规与 PII 检查 → 采纳填入发送框。</p>
+          <button id="openDemo" class="primary">打开演示页面</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h2>添加你的客服站点（按需授权，不授权不注入）</h2>
+          <p>扩展不会自动读取任何网页。只有你明确添加的站点，点击工具栏图标时才会出现助手部件。</p>
+          <button id="openSites">管理我的客服站点</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h2>选择使用方式</h2>
+          <div class="twoc">
+            <div class="card">
+              <h3>BYOK（推荐，立即可用）</h3>
+              <p>填入你自己的火山方舟 API Key：Key 只存在本机、请求直达方舟，扩展作者不经过、不留存。</p>
+              <button id="openByok">配置 BYOK Key</button>
+            </div>
+            <div class="card">
+              <h3>暂无 Key？登记托管额度</h3>
+              <p>验证期完全免费。托管体验额度（每人每月 100 条）筹备中：可留下邮箱做意向登记——v1.0.0 邮箱仅保存在本机、不会上传，正式报名表单上线后会在此页开放。</p>
+              <div id="waitlistForm" class="row">
+                <input type="email" id="waitlistEmail" placeholder="you@example.com" maxlength="200" />
+                <button id="joinWaitlist">本机登记意向</button>
+              </div>
+              <a id="waitlistFormLink" class="hidden" target="_blank" rel="noopener">打开登记表单 →</a>
+              <div id="waitlistStatus" class="muted"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="privacy">
+      <h2>隐私与安全</h2>
+      <ul>
+        <li>会话与配置默认只存在你浏览器本地；卸载即清除。</li>
+        <li>匿名使用统计（安装/活跃/草拟/采纳数量、模型级别、平台大类）不含消息正文、个人信息或完整网址，可在设置页一键关闭。</li>
+        <li>AI 生成内容一律标记为草稿，平台发送按钮永远由你亲自点击。</li>
+      </ul>
+      <div class="row">
+        <button id="openOptions">打开全部设置</button>
+        <button id="openDashboard">打开本地看板</button>
+        <span id="privacyLink" class="muted"></span>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="onboarding.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>跨海聊 CrossChat</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <strong>跨海聊 CrossChat</strong>
+    <span id="modeBadge" class="badge demo">—</span>
+  </header>
+
+  <section class="kpis">
+    <div class="kpi"><span id="kpiCost">¥–</span><label>本月估算成本</label></div>
+    <div class="kpi"><span id="kpiL0">–%</span><label>L0 零 Token 占比</label></div>
+    <div class="kpi"><span id="kpiAdopt">–%</span><label>AI 采纳率</label></div>
+    <div class="kpi"><span id="kpiResp">–s</span><label>首响中位数</label></div>
+  </section>
+
+  <section>
+    <label for="quotaBar">本月配额（全部店铺合计）</label>
+    <div class="bar"><div id="quotaBar" class="fill normal"></div></div>
+    <div id="quotaText" class="muted">—</div>
+  </section>
+
+  <section class="levels">
+    <div><i class="dot L0"></i>L0 规则/FAQ <b id="lvlL0">0</b></div>
+    <div><i class="dot L1"></i>L1 轻量 <b id="lvlL1">0</b></div>
+    <div><i class="dot L2"></i>L2 旗舰 <b id="lvlL2">0</b></div>
+  </section>
+
+  <section class="sitebar">
+    <div id="siteLine" class="muted">读取当前标签页…</div>
+    <button id="toggleSite" style="margin-top:6px"></button>
+  </section>
+
+  <section class="actions">
+    <button id="openDashboard" class="primary">打开本地看板</button>
+    <button id="openOptions">站点 / BYOK / 模型 / 知识库设置</button>
+    <button id="openDemo">打开演示页面</button>
+  </section>
+
+  <footer class="muted">只辅助人草拟，不自动批量发送；数据仅存本机。</footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

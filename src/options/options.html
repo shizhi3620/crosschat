@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>跨海聊 CrossChat 设置</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main>
+    <h1>跨海聊 CrossChat 设置 <span class="ver" id="ver"></span></h1>
+
+    <section id="byok">
+      <h2>1. 运行模式与火山方舟 BYOK</h2>
+      <div class="row">
+        <label><input type="radio" name="mode" value="demo" /> 演示模式（无 Key，本地引擎离线试用）</label>
+        <label><input type="radio" name="mode" value="byok" /> BYOK（卖家自带火山方舟 Key，零垫付）</label>
+      </div>
+      <div class="grid">
+        <label>Base URL<input data-k="ark.baseUrl" /></label>
+        <label>API Key（仅存本机 chrome.storage.local）<input data-k="ark.apiKey" type="password" placeholder="Ark API Key" /></label>
+        <label>L1 模型/接入点 ID（轻量：翻译/常规草拟）<input data-k="ark.models.l1" placeholder="doubao-... / deepseek-..." /></label>
+        <label>L2 模型/接入点 ID（旗舰：纠纷/差评/强负面）<input data-k="ark.models.l2" placeholder="doubao-... / deepseek-r..." /></label>
+        <label>超时（毫秒）<input data-k="ark.timeoutMs" type="number" /></label>
+      </div>
+      <div class="row">
+        <button id="grantHost">为自定义 Base URL 授权跨域访问</button>
+        <button id="testKey">测试连接（消耗极少 token）</button>
+        <span id="connStatus" class="muted"></span>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. 单价（元 / 百万 token，C2 控制台现价核验后回填，可热切换）</h2>
+      <div id="priceMeta" class="muted"></div>
+      <div class="grid">
+        <label>L1 输入价<input data-k="pricing.perMTokens.l1.input" type="number" step="0.001" /></label>
+        <label>L1 输出价<input data-k="pricing.perMTokens.l1.output" type="number" step="0.001" /></label>
+        <label>L1 缓存命中价<input data-k="pricing.perMTokens.l1.cached" type="number" step="0.001" /></label>
+        <label>L2 输入价<input data-k="pricing.perMTokens.l2.input" type="number" step="0.001" /></label>
+        <label>L2 输出价<input data-k="pricing.perMTokens.l2.output" type="number" step="0.001" /></label>
+        <label>L2 缓存命中价<input data-k="pricing.perMTokens.l2.cached" type="number" step="0.001" /></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. 六种降本开关</h2>
+      <div class="grid">
+        <label class="cb"><input data-k="costControl.prefixCacheEnabled" type="checkbox" /> 前缀缓存启用</label>
+        <label>估算缓存命中率<input data-k="costControl.assumedCacheHitRate" type="number" step="0.05" min="0" max="1" /></label>
+        <label>RAG 注入条数（2–3）<input data-k="costControl.ragTopK" type="number" min="2" max="3" /></label>
+        <label>历史保留轮数（更早走摘要）<input data-k="costControl.historyRecentTurns" type="number" min="1" max="20" /></label>
+        <label>max_tokens 上限（草稿 ≤~150 词）<input data-k="costControl.maxOutputTokens" type="number" min="50" max="1000" /></label>
+        <label>每店月度 token 配额<input data-k="costControl.monthlyQuotaTokens" type="number" step="100000" /></label>
+        <label>L2 收紧阈值（用量占比）<input data-k="routing.tightenAtUsageRatio" type="number" step="0.05" min="0" max="1" /></label>
+        <label>L2 会话占比硬顶（月度，到顶强制 L1）<input data-k="routing.maxL2Share" type="number" step="0.05" min="0" max="1" /></label>
+        <label class="cb"><input data-k="costControl.overQuotaForceL1" type="checkbox" /> 超额强制 L1</label>
+      </div>
+      <div class="muted">Batch 半价接口：阶段1 仅预留占位（非实时文案/质检/周报在阶段2接入）。</div>
+    </section>
+
+    <section>
+      <h2>4. 店铺（JSON 数组）</h2>
+      <textarea id="storesJson" rows="4" spellcheck="false"></textarea>
+    </section>
+
+    <section>
+      <h2>5. 默认店铺知识库（商品 FAQ JSON：尺码/物流/售后…）</h2>
+      <div class="row">
+        <button id="resetKb">恢复随包默认知识库</button>
+        <span class="muted">字段：id / intent / tags / keywords / questions / answer</span>
+      </div>
+      <textarea id="kbJson" rows="14" spellcheck="false"></textarea>
+    </section>
+
+    <section id="sites">
+      <h2>6. 我的客服站点（按需动态注入，默认不读取任何网页）</h2>
+      <div class="muted" style="margin-bottom:8px">
+        只有在此显式添加并完成浏览器授权的站点，扩展才会注入助手部件；移除后立即停止注入。
+        扩展本身不使用「读取所有网站数据」的静态权限。
+      </div>
+      <div id="sitePresets" class="site-list"></div>
+      <div class="row" style="margin-top:8px">
+        <input id="customSite" type="text" placeholder="自定义站点域名，如 crm.yourdomain.com" style="flex:1;min-width:220px" />
+        <button id="addCustomSite">添加自定义站点</button>
+        <span id="siteStatus" class="muted"></span>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <h2>7. 隐私与匿名使用统计</h2>
+      <label class="cb" style="padding-top:0">
+        <input id="telemetryEnabled" type="checkbox" />
+        发送匿名使用统计（帮助判断产品是否有用，默认开启，可随时关闭）
+      </label>
+      <div class="muted" style="margin-top:6px">
+        仅含：安装、每日活跃、草拟/采纳计数、模型级别（L0/L1/L2）、平台大类（如 shopee/tiktok/other，不含完整域名）、运行模式（demo/byok）。
+        <b>不含</b>消息正文、买家信息、完整网址、页面标题或 API Key。关闭后不产生任何统计请求。
+      </div>
+      <div id="telemetryState" class="muted" style="margin-top:6px"></div>
+    </section>
+
+    <div class="sticky">
+      <button id="save" class="primary">保存全部设置</button>
+      <span id="saveStatus" class="muted"></span>
+    </div>
+  </main>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

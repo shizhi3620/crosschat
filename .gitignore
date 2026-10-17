@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# build / packaging output
+*.zip
+dist/
+*.crx
+*.pem
+
+# 真实遥测配置只在打包时注入，永不入库（占位形态 src/config/telemetry.config.js 正常跟踪）
+src/config/telemetry.config.prod.js
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# 本地临时探针/截图输出
+.c2b-test-ext/
+.c2b-test-profile/

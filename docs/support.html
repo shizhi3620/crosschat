@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>支持与 FAQ · Support — 跨海聊 CrossChat</title>
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+<div class="langbar"><div class="container">
+  <button data-lang="zh">中文</button><button data-lang="en">English</button>
+</div></div>
+
+<nav class="nav"><div class="container">
+  <a class="brand" href="index.html">跨海聊 CrossChat</a>
+  <div class="links">
+    <a href="index.html#features" class="zh">功能</a><a href="index.html#features" class="en">Features</a>
+    <a href="support.html">FAQ</a>
+    <a href="privacy.html" class="zh">隐私</a><a href="privacy.html" class="en">Privacy</a>
+    <a href="terms.html" class="zh">条款</a><a href="terms.html" class="en">Terms</a>
+  </div>
+</div></nav>
+
+<div class="legal">
+<!-- ============ 中文 ============ -->
+<div class="zh">
+<h1>支持与常见问题</h1>
+<p class="lead">v1.0.0 · 找不到答案？邮件 <a href="mailto:CONTACT@example.com">CONTACT@example.com</a> <span class="fill">【上架前替换】</span></p>
+
+<h2>常见问题</h2>
+<details open><summary>1. 收费吗？</summary><p>上线验证期内扩展完全免费、无功能限制。BYOK 模式下模型调用按你的火山方舟账号实际用量，由你直接与火山引擎结算；离线演示模式不产生任何费用。</p></details>
+<details><summary>2. 必须有 API Key 才能用吗？</summary><p>不是。首次安装可直接进入内置离线演示（4 个场景、不连外网）跑通全部流程。需要真实草拟时再配置 BYOK：在火山引擎控制台开通火山方舟、创建 API Key，粘贴到扩展设置页即可，Key 只存在本机。</p></details>
+<details><summary>3. 它会自动回复买家吗？</summary><p><strong>永远不会。</strong>扩展只把草稿填入页面回复框，发送按钮由你本人点击；它不调用任何平台发送接口、不定时发消息。</p></details>
+<details><summary>4. 支持哪些网站？</summary><p>适用于你明确授权的跨境卖家后台、卖家中心、客服 CRM 与网页邮箱，也可以添加任意自定义域名。默认不读取任何网页——只有你在设置里添加并完成浏览器授权的站点才会注入助手，移除后立即停止。</p></details>
+<details><summary>5. 我的 API Key 安全吗？</summary><p>Key 保存在浏览器本地存储中，模型请求从你的浏览器直连火山方舟，不经过扩展作者的任何服务器。你可以随时在设置页删除 Key。</p></details>
+<details><summary>6. 匿名统计包含什么？怎么关闭？</summary><p>仅 4 类计数事件（安装、每日活跃、草拟、采纳）和 3 个枚举字段（模型级别 L0/L1/L2、平台大类、运行模式），不含消息正文或个人信息。设置页第 7 节一键关闭，关闭后零请求。详见<a href="privacy.html">隐私政策</a>。</p></details>
+<details><summary>7. 怎么彻底删除我的数据？</summary><p>在看板点「清空计量数据」、设置页删除 Key 与站点；卸载扩展时浏览器会清除全部本地数据。</p></details>
+<details><summary>8. 中国大陆能用吗？访问不了商店怎么办？</summary><p>安装需要 Chrome 浏览器、Chrome Web Store 和一个可登录的 Google 账号；如果商店页暂时打不开，请换一个能正常访问商店的网络环境稍后再试。安装后的日常使用不依赖境外网络：BYOK 直连火山方舟国内端点，离线演示完全本地运行。</p></details>
+<details><summary>9. 支持 Edge / Firefox 吗？</summary><p>v1.0.0 要求 Chrome 110+。基于同一 MV3 架构的 Edge 版本计划在 Chrome 上架验证后发布；Firefox 暂无时间表。</p></details>
+<details><summary>10. AI 草稿出错或合规检查漏判怎么办？</summary><p>草稿必须经你审核后手动发送，你对最终内容负责。合规提示是辅助手段，不保证覆盖全部风险。发现质量问题欢迎把场景（脱敏后）反馈给我们。</p></details>
+<details><summary>11. 发现安全漏洞怎么报告？</summary><p>请邮件 <a href="mailto:CONTACT@example.com">CONTACT@example.com</a> 描述复现步骤，<strong>请不要在公开渠道发布漏洞细节</strong>，我们会在 72 小时内确认。</p></details>
+
+<h2>安装与配置</h2>
+<ol class="steps" style="margin-bottom:20px">
+<li>在 Chrome Web Store 页面点击「添加至 Chrome」并确认（商店链接将在<a href="index.html">首页</a>审核通过后开放）。</li>
+<li>首启引导页：先用内置演示 30 秒熟悉流程，无需 Key、不连外网。</li>
+<li>在「管理我的客服站点」里添加你要使用的站点并逐个授权（按需授权，可随时移除）。</li>
+<li>（可选）在火山引擎控制台开通火山方舟、创建 API Key，填入设置页 BYOK 区；没有 Key 可继续使用演示模式。</li>
+<li>打开你的客服网页，选中一条买家消息，点工具栏里的跨海聊图标即可开始。</li>
+</ol>
+
+<h2>卸载</h2>
+<p>地址栏输入 <code>chrome://extensions</code> → 找到跨海聊 CrossChat → 移除。移除后本地配置、Key、历史与计量数据一并清除。</p>
+</div>
+
+<!-- ============ English ============ -->
+<div class="en">
+<h1>Support &amp; FAQ</h1>
+<p class="lead">v1.0.0 · No answer here? Email <a href="mailto:CONTACT@example.com">CONTACT@example.com</a> <span class="fill">[replace before publishing]</span></p>
+
+<h2>Frequently asked questions</h2>
+<details open><summary>1. What does it cost?</summary><p>Nothing during the launch validation period — no feature limits. In BYOK mode, model calls are billed by Volcengine directly against your own account and usage; the offline demo mode makes no paid calls at all.</p></details>
+<details><summary>2. Do I need an API key?</summary><p>No. After install you can run the built-in offline demo (four scenarios, no network) through the complete pipeline. Configure BYOK later when you want real drafts: open Volcengine Ark in the Volcengine console, create an API key, and paste it into the options page. The key stays on your machine.</p></details>
+<details><summary>3. Does it auto-reply to buyers?</summary><p><strong>Never.</strong> It only fills a draft into the page's reply box; you click send yourself. It calls no platform messaging API and never schedules messages.</p></details>
+<details><summary>4. Which websites are supported?</summary><p>Cross-border seller backends, seller centers, customer-service CRMs and webmail that you explicitly authorize, plus any custom domain you add. Nothing is read by default: the assistant is injected only on sites you add and grant, and injection stops as soon as you remove one.</p></details>
+<details><summary>5. Is my API key safe?</summary><p>It lives in the browser's local storage, and model requests go directly from your browser to Volcengine Ark — through no server of ours. You can remove it in the options page at any time.</p></details>
+<details><summary>6. What is in the anonymous statistics? How do I opt out?</summary><p>Four counter events (install, daily active, draft generated, draft adopted) with three enumerated fields only (model tier L0/L1/L2, coarse platform class, run mode) — no message text or personal information. One toggle in section 7 of the options page turns it off, after which zero requests are sent. See the <a href="privacy.html">Privacy Policy</a>.</p></details>
+<details><summary>7. How do I delete all my data?</summary><p>Use "Clear metering data" on the dashboard and remove your key/sites in options; uninstalling the extension makes the browser remove all local data.</p></details>
+<details><summary>8. Does it work in mainland China? What if the store won't load?</summary><p>Installation needs Chrome, the Chrome Web Store, and a Google account you can sign in with; if the store page does not load, retry later from a network where it is reachable. Day-to-day use after installation needs no overseas network: BYOK calls go straight to Volcengine's domestic endpoint, and the demo runs entirely locally.</p></details>
+<details><summary>9. Edge or Firefox?</summary><p>v1.0.0 requires Chrome 110+. An Edge release on the same MV3 architecture is planned after the Chrome launch is validated; Firefox has no timeline yet.</p></details>
+<details><summary>10. What if a draft is wrong or a risky draft slips past the checks?</summary><p>Drafts are sent only after your manual review, so you remain responsible for final content. Compliance warnings are assistance, not a guarantee. Please send us (redacted) examples so the product can improve.</p></details>
+<details><summary>11. How do I report a security issue?</summary><p>Email reproduction steps to <a href="mailto:CONTACT@example.com">CONTACT@example.com</a> and <strong>please do not post vulnerability details publicly</strong>; we acknowledge within 72 hours.</p></details>
+
+<h2>Install &amp; setup</h2>
+<ol class="steps" style="margin-bottom:20px">
+<li>Click "Add to Chrome" on the Chrome Web Store page (the store link appears on the <a href="index.html">homepage</a> once review completes).</li>
+<li>On the first-run page, spend 30 seconds with the built-in demo — no key, no network.</li>
+<li>Add the sites you use under "Manage my customer-service sites" and grant them one by one (grants are optional and revocable).</li>
+<li>(Optional) Enable Volcengine Ark in the Volcengine console, create an API key, and paste it into the BYOK section; without a key you can keep using the demo.</li>
+<li>Open your customer-service page, select a buyer message, and click the CrossChat toolbar icon.</li>
+</ol>
+
+<h2>Uninstall</h2>
+<p>Go to <code>chrome://extensions</code> → find CrossChat → Remove. Removing it also clears local settings, keys, history and metering data.</p>
+</div>
+</div>
+
+<footer><div class="container">
+  <span>© 2026 <span class="fill">【开发者名称 / developer name】</span></span>
+  <a href="privacy.html" class="zh">隐私政策</a><a href="privacy.html" class="en">Privacy</a>
+  <a href="terms.html" class="zh">服务条款</a><a href="terms.html" class="en">Terms</a>
+  <a href="support.html">FAQ</a>
+  <span class="right">v1.0.0</span>
+</div></footer>
+</body>
+<script src="assets/lang.js"></script>
+</html>

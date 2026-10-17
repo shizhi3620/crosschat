@@ -1,0 +1,8 @@
+{
+  "app_name": {
+    "message": "跨海聊 CrossChat — AI 客服回复草拟助手"
+  },
+  "app_description": {
+    "message": "在你自己的客服后台用 AI 分级草拟多语种回复：翻译、知识库引用、合规与 PII 护栏。只草拟、由你人工点发送，绝不自动回复。支持 BYOK 自带模型 Key 与离线演示。"
+  }
+}

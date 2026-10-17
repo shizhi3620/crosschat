@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>跨海聊 本地看板</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <main>
+    <h1>跨海聊 CrossChat · 本地看板 <span id="month" class="muted"></span></h1>
+
+    <section class="kpis">
+      <div class="kpi"><span id="kTotal">–</span><label>本月处理消息</label></div>
+      <div class="kpi"><span id="kCost">¥–</span><label>估算模型成本</label></div>
+      <div class="kpi"><span id="kL0">–%</span><label>L0 零 Token 占比</label></div>
+      <div class="kpi"><span id="kL2">–%</span><label>L2 旗舰占比（目标 10–20%）</label></div>
+      <div class="kpi"><span id="kAdopt">–%</span><label>AI 草稿采纳率</label></div>
+      <div class="kpi"><span id="kResp">–s</span><label>首响中位数</label></div>
+      <div class="kpi"><span id="kCache">–%</span><label>前缀缓存命中率</label></div>
+      <div class="kpi"><span id="kBlock">–</span><label>合规拦截次数</label></div>
+    </section>
+
+    <section>
+      <h2>逐店 token 与成本</h2>
+      <table>
+        <thead>
+          <tr><th>店铺</th><th>消息数</th><th>输入 token</th><th>输出 token</th><th>缓存命中 token</th><th>估算成本</th><th>L0/L1/L2</th><th>月度配额</th></tr>
+        </thead>
+        <tbody id="storeRows"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>单位经济基准（按当前单价与典型用量画像估算）</h2>
+      <p class="muted" id="priceMeta"></p>
+      <table>
+        <thead><tr><th>策略</th><th>无缓存 ¥/千次会话</th><th>60% 缓存命中 ¥/千次会话</th></tr></thead>
+        <tbody id="projRows"></tbody>
+      </table>
+      <p class="muted">参考基线（早期估算，仅供量级参考）：全 L1 ≈¥2.6/¥1.6，80/20 混合 ≈¥6.5/¥4.5，全 L2 ≈¥22/¥15.9。L0 命中 20–30% 时实际更低。</p>
+    </section>
+
+    <section class="row">
+      <button id="reset">清空计量数据</button>
+      <a href="../options/options.html">打开设置</a>
+    </section>
+  </main>
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

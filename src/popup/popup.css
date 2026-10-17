@@ -1,0 +1,27 @@
+:root { color-scheme: light; }
+body { width: 320px; margin: 0; padding: 12px; font: 12px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: #1f2328; }
+header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.badge { border-radius: 10px; padding: 1px 8px; font-size: 11px; font-weight: 600; }
+.badge.demo { background: #fff8c5; color: #7d4e00; }
+.badge.byok { background: #dafbe1; color: #116329; }
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.kpi { background: #f6f8fa; border-radius: 8px; padding: 8px; }
+.kpi span { display: block; font-size: 16px; font-weight: 700; }
+.kpi label { color: #57606a; font-size: 11px; }
+label { display: block; margin: 6px 0 4px; color: #57606a; }
+.bar { height: 8px; border-radius: 4px; background: #eaeef2; overflow: hidden; }
+.fill { height: 100%; width: 0; background: #2da44e; }
+.fill.tighten { background: #d4a72c; }
+.fill.cap { background: #cf222e; }
+.levels { display: flex; gap: 10px; margin: 8px 0; color: #57606a; }
+.levels b { color: #1f2328; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 3px; }
+.dot.L0 { background: #2da44e; } .dot.L1 { background: #0969da; } .dot.L2 { background: #bc4c00; }
+.actions { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+button { border: 1px solid #d0d7de; background: #f6f8fa; border-radius: 6px; padding: 7px; cursor: pointer; font-size: 12px; }
+button.primary { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+.muted { color: #6e7781; font-size: 11px; }
+.sitebar { border-top: 1px solid #eaeef2; padding-top: 8px; margin-bottom: 8px; }
+.sitebar button { width: 100%; }
+.hidden { display: none; }
+footer { margin-top: 6px; }
