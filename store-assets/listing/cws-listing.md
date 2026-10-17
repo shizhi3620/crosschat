@@ -27,15 +27,17 @@
 
 ## B. English listing（默认）
 
-### Item name（≤75 字符，当前 50）
+### Item name（≤75 字符，当前 48）
 ```
 CrossChat — AI Customer Reply Drafting Assistant
 ```
 
-### Summary（≤132 字符，当前 120）
+### Summary（≤132 字符，当前 116；与包内 `_locales/en` manifest description 逐字一致）
 ```
 Multilingual AI reply drafts for seller chats: translation, KB citations, PII masking. Drafts only — you click send.
 ```
+
+> ⚠️ **CWS 提交陷阱（2026-10-17 首包实测）**：上传 ZIP 后，商店会用包内 manifest 的英文 description **自动预填** Summary 字段。首包该串为 145 字符，提交时被拒（`The description translation in locale en is too long: 145. It exceeds maximum size limit of 132 characters.`）。已把 manifest description 改为上面这串（116）并重打包；重传新包后仍须肉眼复核 Summary = 本串。若不想重传包，也可直接在表单里把该字段手动改成上面这串再提交。
 
 ### Full description
 ```
@@ -72,12 +74,12 @@ Requirements: Google Chrome 110 or newer (other Chromium browsers follow later).
 
 ## C. Chinese (Simplified) listing
 
-### 商品名称（≤75 字符，当前 38）
+### 商品名称（≤75 字符，当前 27）
 ```
 跨海聊 CrossChat — AI 客服回复草拟助手
 ```
 
-### 一句话简介（≤132 字符，当前 55）
+### 一句话简介（≤132 字符，当前 52）
 ```
 跨境客服 AI 草拟多语种回复：翻译、知识库引用、PII 脱敏与合规护栏。只草拟，每条回复由你亲自发送。
 ```
@@ -196,6 +198,8 @@ The extension does not send messages, schedule messages, click platform buttons,
 
 ## H. 与代码的对应关系（提交前核对）
 
-- manifest `name`/`description` 已改为 `__MSG_app_name__` / `__MSG_app_description__`：安装后英文 UI 用户看到 B 节名称，中文 UI 用户看到 C 节名称；商店 listing 需与这两个字符串逐字一致。
+- manifest `name`/`description` 已改为 `__MSG_app_name__` / `__MSG_app_description__`：安装后英文 UI 用户看到 B 节名称，中文 UI 用户看到 C 节名称。
+- **英文 description（Summary 同源）**：首包 `_locales/en` 为 145 字符，被 CWS 以 132 上限拒绝；2026-10-17（commit `8e0991c`）起改为与 §B Summary **逐字一致的 116 字符串**。`zh_CN` description 86 字符，与 §C 简介同义（商店中文 Summary 仍按 §C 粘贴）。
+- CWS 上传 ZIP 时会以包内 default locale 的 description 自动预填 Summary 字段——重传包后必须打开 Store listing 页复核该字段长度与内容。
 - 安装后 chrome://extensions 显示名来源：`_locales/en/messages.json`（default_locale=en）与 `_locales/zh_CN/messages.json`。
 - 截图中 contact@example.com 仅为占位；正式联系邮箱 `crosschat.app@gmail.com` 已写入 `src/config/telemetry.config.js` 的 `CONTACT_EMAIL`（公开联系邮箱，非密钥）；商店包内页面运行时即显示真值。
