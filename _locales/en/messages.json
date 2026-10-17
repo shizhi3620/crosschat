@@ -3,6 +3,6 @@
     "message": "CrossChat — AI Customer Reply Drafting Assistant"
   },
   "app_description": {
-    "message": "AI drafts multilingual seller-chat replies: translation, KB citations, compliance guardrails. Drafts only — you click send. BYOK or offline demo."
+    "message": "Multilingual AI reply drafts for seller chats: translation, KB citations, PII masking. Drafts only — you click send."
   }
 }
