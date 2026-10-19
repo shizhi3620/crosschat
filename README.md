@@ -8,7 +8,7 @@
 
 - 🌐 官网/安装：https://shizhi3620.github.io/crosschat/
 - 📄 [隐私政策](docs/privacy.html) · [服务条款](docs/terms.html) · [支持与 FAQ](docs/support.html)
-- 🧩 Chrome Web Store：审核通过后链接发布于此（要求 Chrome 110+）
+- 🧩 [Chrome Web Store 安装](https://chromewebstore.google.com/detail/crosschat-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh)（要求 Chrome 110+）
 
 ## 工作方式
 
@@ -76,7 +76,7 @@ No server; data stays local by default. BYOK (bring your own Volcengine Ark API 
 
 - 🌐 Site/install: https://shizhi3620.github.io/crosschat/
 - 📄 [Privacy Policy](docs/privacy.html) · [Terms](docs/terms.html) · [Support & FAQ](docs/support.html)
-- 🧩 Chrome Web Store link published here after review (Chrome 110+).
+- 🧩 [Install on the Chrome Web Store](https://chromewebstore.google.com/detail/crosschat-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh) (Chrome 110+).
 
 ## How it works
 
