@@ -16,8 +16,8 @@
 <!-- ============ 中文 ============ -->
 <div class="zh">
 <h1>隐私政策</h1>
-<p class="lead">跨海聊 CrossChat 浏览器扩展 v1.0.0 · 生效日期：2026-10-16</p>
-<div class="note info">一句话版本：你的买家消息、API Key 和店铺数据只存在你自己的设备上；我们不收内容、不做广告、不卖数据。匿名使用计数可一键关闭。</div>
+<p class="lead">跨海聊 CrossChat 浏览器扩展 v1.0.1 · 生效日期：2026-10-19（v1.0.0 首发于 2026-10-16）</p>
+<div class="note info">一句话版本：你的买家消息、API Key 和店铺数据只存在你自己的设备上；我们不收内容、不做广告、不卖数据。<strong>v1.0.1 起匿名统计通道默认完全停用，扩展不发出任何统计请求、安装包内也不含任何统计密钥。</strong></div>
 
 <div class="toc">
 <a href="#what">产品做什么</a><a href="#local">本地数据</a><a href="#network">网络请求</a>
@@ -36,17 +36,17 @@
 <tr><td>BYOK API Key</td><td>你自填的火山方舟 API Key，仅以浏览器本地存储保存</td><td>设置页删除或卸载</td></tr>
 <tr><td>知识库</td><td>你自己的售后 FAQ（首次安装时用扩展包内置文件播种，可自行编辑）</td><td>设置页编辑/清空或卸载</td></tr>
 <tr><td>会话与计量历史</td><td>处理时间、分级、token 用量、采纳情况（不含密钥；消息正文仅在近期会话记录中）</td><td>看板「清空计量数据」或卸载</td></tr>
-<tr><td>等候名单邮箱</td><td>v1.0.0 中你登记的邮箱<strong>仅保存在本机、不会被上传或发送</strong></td><td>卸载即清除</td></tr>
-<tr><td>匿名统计设置</td><td>安装时本机随机生成的客户端 ID、每日活跃去重日期、开关状态</td><td>设置页一键关闭；卸载即清除</td></tr>
+<tr><td>等候名单邮箱（遗留）</td><td>v1.0.0 首启页曾提供本机意向登记，登记的邮箱<strong>仅保存在本机、从未被上传或发送</strong>；v1.0.1 已移除登记表单，不再收集</td><td>卸载即清除</td></tr>
+<tr><td>匿名统计设置</td><td>安装时本机随机生成的客户端 ID、每日活跃去重日期、开关状态（<strong>v1.0.1 仅本机保留，不产生任何外呼</strong>）</td><td>设置页一键关闭；卸载即清除</td></tr>
 </tbody>
 </table>
-<p>扩展<strong>不需要注册账号</strong>，不收集你的姓名、邮箱（自愿登记的除外，且见上条）、电话或付款信息。</p>
+<p>扩展<strong>不需要注册账号</strong>，不收集你的姓名、邮箱（v1.0.0 本机遗留登记除外，从未上传，见上条）、电话或付款信息。</p>
 
 <h2 id="network">3. 扩展发起的网络请求（完整清单）</h2>
 <h3>3.1 模型请求：直发服务商，不经过我们</h3>
 <p>仅当你配置了 BYOK（自带 Key）并主动点「翻译 / 草拟回复」时，浏览器会把买家消息文本和相关知识库片段<strong>直接</strong>发送到火山方舟（Volcengine Ark，<code>ark.cn-beijing.volces.com</code>，位于中国大陆），使用的是你自己的 API Key。请求不经过、不中转、不留存在扩展作者的任何服务器上。该处理受火山引擎/字节跳动的隐私政策约束。在离线演示模式下不会发起任何模型请求。买家消息中的邮箱、电话、银行卡号、地址等会在发送前自动脱敏，并在你采纳草稿时在本机还原。</p>
-<h3>3.2 匿名使用统计：Google Analytics 4（默认开启，可关闭）</h3>
-<p>扩展通过 Google Analytics Measurement Protocol v2 上报少量匿名计数，用于判断产品是否有人用、是否有用。详见<a href="#telemetry">第 4 节</a>。</p>
+<h3>3.2 匿名使用统计：v1.0.1 已停用（不外呼、不含密钥）</h3>
+<p>v1.0.0 曾通过 Google Analytics Measurement Protocol v2 直连上报少量匿名计数。该方式需要把写入密钥打包进公开的扩展包，公开分发包中的密钥无法保密，我们因此在 <strong>v1.0.1 中彻底移除了这条直连通道</strong>：安装包内不含任何统计密钥、不申请 Google Analytics 域名的主机权限，统计端点配置为空字符串——无论设置页开关状态如何，<strong>都不会发出任何统计请求</strong>。将来若恢复统计，只会发往扩展作者自建的<strong>匿名中继</strong>（密钥保存在服务端、带来源白名单与限流），且默认关闭、可一键退出。详见<a href="#telemetry">第 4 节</a>。</p>
 <h3>3.3 不会发生的请求</h3>
 <ul>
 <li>扩展不读取你访问的网页：助手只在你<strong>明确添加并授权</strong>的站点上注入，移除授权立即停止注入；</li>
@@ -55,6 +55,7 @@
 </ul>
 
 <h2 id="telemetry">4. 匿名统计的精确内容</h2>
+<p><strong>当前状态（v1.0.1）：统计通道停用，零请求、零密钥、零第三方接收方。</strong>设置页第 7 节的开关保留在界面上，但勾选与否都不会产生外呼。以下白名单是代码中保留的<strong>事件结构定义</strong>，即未来通过自建匿名中继恢复统计时最多只会发送这些内容；恢复时会更新本政策版本。</p>
 <p>事件采用代码内白名单，只有以下 4 个事件、3 个枚举字段，任何其他字段在发送前即被丢弃：</p>
 <table>
 <thead><tr><th>事件</th><th>含义</th><th>附带字段</th></tr></thead>
@@ -67,9 +68,10 @@
 </table>
 <ul>
 <li><strong>绝不包含</strong>：消息正文、译文、知识库内容、个人信息、完整网址、页面标题、API Key。</li>
-<li>客户端 ID 是安装时随机生成的 UUID，不与任何身份关联；我们不设置 Cookie（Measurement Protocol 不依赖页面 Cookie）。Google 作为接收方可能获得请求来源 IP（用于其标准数据处理），请同时参阅 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隐私政策</a>。</li>
-<li>关闭方式：设置页第 7 节取消勾选「发送匿名使用统计」，关闭后<strong>不产生任何统计请求</strong>。</li>
-<li>扩展包内的 Measurement Protocol 密钥只能向我们的 GA 资源<strong>写入</strong>上述事件，不能读取任何数据。</li>
+<li>客户端 ID 是安装时随机生成的 UUID，不与任何身份关联，不设置 Cookie。</li>
+<li>v1.0.0 随包分发的 Google Analytics 写入密钥应视为已泄露：v1.0.1 代码已不再使用它，运营方将其在 Google 后台<strong>吊销</strong>；该密钥本身只能写入计数事件、不能读取数据，但仍按泄露处理。</li>
+<li>未来恢复统计时的架构：扩展只向我们自建的 HTTPS 匿名中继 POST <code>{measurement_id, client_id, events}</code>，请求体<strong>不含任何密钥</strong>；真正的统计密钥只保存在中继服务端，中继按来源白名单与限流转发，可收到的字段仍以上表白名单为上限。</li>
+<li>关闭方式：设置页第 7 节取消勾选「发送匿名使用统计」（v1.0.1 中开关两侧都不产生请求；中继上线后默认仍为关闭）。</li>
 </ul>
 
 <h2 id="website">5. 本网站与商店页面</h2>
@@ -77,7 +79,7 @@
 
 <h2 id="rights">6. 你的选择与权利</h2>
 <ul>
-<li><strong>关闭统计</strong>：设置页一键关闭，立即生效；</li>
+<li><strong>关闭统计</strong>：v1.0.1 中统计通道已停用（零请求）；未来恢复后设置页仍可一键关闭，立即生效；</li>
 <li><strong>删除数据</strong>：看板清空计量数据、设置页删除 Key/站点，或直接卸载扩展（本地数据随之全部删除）；</li>
 <li><strong>查询/投诉</strong>：通过下方邮箱联系，我们在 30 天内回复；</li>
 <li>本扩展不面向 13 岁以下儿童，不主动收集儿童信息。</li>
@@ -87,7 +89,10 @@
 <p>实质性变更会在本页更新并提高版本号/生效日期；如新增任何数据收集，会在扩展更新说明中明示。</p>
 <table>
 <thead><tr><th>版本</th><th>日期</th><th>说明</th></tr></thead>
-<tbody><tr><td>v1.0.0</td><td>2026-10-16</td><td>首次公开发布版本。</td></tr></tbody>
+<tbody>
+<tr><td>v1.0.1</td><td>2026-10-19</td><td>移除 Google Analytics 直连统计与包内写入密钥（统计通道停用，零外呼），未来仅通过自建匿名中继恢复；移除等候名单邮箱收集；注入脚本改为扩展包内预编译文件并移除对外暴露的 web_accessible_resources；主机权限收敛为火山方舟单域名。</td></tr>
+<tr><td>v1.0.0</td><td>2026-10-16</td><td>首次公开发布版本。</td></tr>
+</tbody>
 </table>
 
 <h2 id="contact">8. 联系</h2>
@@ -98,8 +103,8 @@
 <!-- ============ English ============ -->
 <div class="en">
 <h1>Privacy Policy</h1>
-<p class="lead">CrossChat browser extension v1.0.0 · Effective: 2026-10-16</p>
-<div class="note info">In one sentence: your buyer messages, API key and store data stay on your own device; we collect no message content, run no ads, and never sell data. Anonymous usage counts can be switched off in one click.</div>
+<p class="lead">CrossChat browser extension v1.0.1 · Effective: 2026-10-19 (v1.0.0 first published 2026-10-16)</p>
+<div class="note info">In one sentence: your buyer messages, API key and store data stay on your own device; we collect no message content, run no ads, and never sell data. <strong>Since v1.0.1 the statistics channel is fully disabled: the extension sends no analytics requests and ships with no analytics secret.</strong></div>
 
 <div class="toc">
 <a href="#what">What it does</a><a href="#local">Local data</a><a href="#network">Network requests</a>
@@ -118,17 +123,17 @@
 <tr><td>BYOK API key</td><td>Your Volcengine Ark API key, stored only in local browser storage</td><td>Remove in options, or uninstall</td></tr>
 <tr><td>Knowledge base</td><td>Your own after-sales FAQ (seeded once from a file packaged inside the extension; fully editable)</td><td>Edit/clear in options, or uninstall</td></tr>
 <tr><td>Conversation &amp; usage history</td><td>Timestamps, routing level, token usage, adoption metrics (recent message text may appear in session history; never your key)</td><td>"Clear metering data" on the dashboard, or uninstall</td></tr>
-<tr><td>Waitlist email</td><td>In v1.0.0 an email you register <strong>stays on this device only; it is never uploaded or sent</strong></td><td>Removed on uninstall</td></tr>
-<tr><td>Telemetry settings</td><td>Random per-install client UUID, daily-active dedup date, opt-out state</td><td>One-click opt-out in options; removed on uninstall</td></tr>
+<tr><td>Waitlist email (legacy)</td><td>v1.0.0 offered a local-only intention registration on the first-run page; any registered email <strong>stayed on this device and was never uploaded or sent</strong>. The form was removed in v1.0.1 and no emails are collected</td><td>Removed on uninstall</td></tr>
+<tr><td>Telemetry settings</td><td>Random per-install client UUID, daily-active dedup date, opt-out state (<strong>v1.0.1: local only, no outbound traffic</strong>)</td><td>One-click opt-out in options; removed on uninstall</td></tr>
 </tbody>
 </table>
-<p>The extension <strong>does not require an account</strong> and does not collect your name, email (apart from the voluntary local-only registration above), phone number, or payment information.</p>
+<p>The extension <strong>does not require an account</strong> and does not collect your name, email (apart from the legacy v1.0.0 local-only registration above, which was never uploaded), phone number, or payment information.</p>
 
 <h2 id="network">3. Every network request the extension makes</h2>
 <h3>3.1 Model requests — sent directly to the provider, never through us</h3>
 <p>Only when you have configured BYOK with your own key and you actively click Translate/Draft, the browser sends the buyer message and relevant knowledge-base snippets <strong>directly</strong> to Volcengine Ark (<code>ark.cn-beijing.volces.com</code>, hosted in mainland China) using your own API key. These requests do not pass through, and are not stored on, any server operated by the extension developer. They are subject to Volcengine/ByteDance's own privacy policy. The offline demo mode makes no model requests. Email addresses, phone numbers, card numbers and postal addresses detected in buyer messages are masked before sending and restored locally when you adopt a draft.</p>
-<h3>3.2 Anonymous usage statistics — Google Analytics 4 (on by default, opt-out available)</h3>
-<p>A small set of anonymous counters is sent via Google Analytics Measurement Protocol v2, solely to assess whether the product is used and useful. See <a href="#telemetry">section 4</a>.</p>
+<h3>3.2 Anonymous usage statistics — disabled in v1.0.1 (no traffic, no secret)</h3>
+<p>v1.0.0 sent a small set of anonymous counters directly via Google Analytics Measurement Protocol v2. That transport requires a write secret to be packaged inside the publicly distributed extension, and a secret in a public package cannot stay secret. We therefore <strong>removed the direct transport completely in v1.0.1</strong>: the package contains no analytics secret, requests no host permission for Google Analytics domains, and the configured endpoint is an empty string — regardless of the options toggle, <strong>no analytics request is ever sent</strong>. If statistics are re-enabled in the future they will go only to a self-operated <strong>anonymous relay</strong> (secret held server-side, with origin allow-list and rate limiting), defaulting to off with a one-click opt-out. See <a href="#telemetry">section 4</a>.</p>
 <h3>3.3 Requests that never happen</h3>
 <ul>
 <li>The extension does not read the web pages you visit: the assistant is injected only on sites <strong>you explicitly add and authorize</strong>, and injection stops immediately when you remove a site;</li>
@@ -137,6 +142,7 @@
 </ul>
 
 <h2 id="telemetry">4. Exactly what the usage statistics contain</h2>
+<p><strong>Current status (v1.0.1): the channel is disabled — zero requests, zero secrets, zero third-party recipients.</strong> The toggle in section 7 of the options page remains in the UI but produces no outbound traffic in either position. The whitelist below is the <strong>event schema retained in code</strong>: it is the maximum that could ever be sent if statistics are re-enabled in the future through the self-operated anonymous relay. Any re-enabling will be published as a new version of this policy.</p>
 <p>Events are restricted by a code-level whitelist to the 4 events and 3 enumerated fields below; any other field is dropped before sending:</p>
 <table>
 <thead><tr><th>Event</th><th>Meaning</th><th>Parameters</th></tr></thead>
@@ -149,9 +155,10 @@
 </table>
 <ul>
 <li><strong>Never included</strong>: message text, translations, knowledge-base content, personal data, full URLs, page titles, or API keys.</li>
-<li>The client ID is a random UUID generated at install, linked to no identity. We set no cookies (Measurement Protocol does not rely on page cookies). Google, as the receiving party, may see the request source IP under its standard data processing; see also the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
-<li>To opt out: uncheck "Send anonymous usage statistics" in section 7 of the options page. After opt-out <strong>no statistics requests are made</strong>.</li>
-<li>The Measurement Protocol secret packaged in the extension can only <strong>write</strong> these events to our analytics property; it cannot read data.</li>
+<li>The client ID is a random UUID generated at install, linked to no identity; no cookies are set.</li>
+<li>The Google Analytics write secret shipped in v1.0.0 must be treated as exposed: v1.0.1 no longer uses it, and the operator is <strong>revoking it in the Google admin console</strong>. The secret could only write counter events, never read data, but it is still handled as a leak.</li>
+<li>Future relay architecture: the extension would POST only <code>{measurement_id, client_id, events}</code> over HTTPS to our self-operated anonymous relay — the payload <strong>contains no secret</strong>; the real analytics secret stays on the relay server, which forwards under an origin allow-list and rate limiting, with relayed fields capped by the whitelist above.</li>
+<li>To opt out: uncheck "Send anonymous usage statistics" in section 7 of the options page (in v1.0.1 neither position sends anything; if the relay ships, it still defaults to off).</li>
 </ul>
 
 <h2 id="website">5. This website and the store listing</h2>
@@ -159,7 +166,7 @@
 
 <h2 id="rights">6. Your choices and rights</h2>
 <ul>
-<li><strong>Opt out of statistics</strong>: one toggle in the options page, effective immediately;</li>
+<li><strong>Opt out of statistics</strong>: the channel is disabled in v1.0.1 (zero requests); if it is re-enabled later, the same one-toggle opt-out applies immediately;</li>
 <li><strong>Delete data</strong>: clear metering data on the dashboard, remove your key and sites in options, or simply uninstall the extension (all local data is removed);</li>
 <li><strong>Access requests / complaints</strong>: email the address below; we respond within 30 days;</li>
 <li>The extension is not directed to children under 13 and does not knowingly collect children's information.</li>
@@ -169,7 +176,10 @@
 <p>Material changes will be posted here with a new version number and effective date; any new data collection will also be stated explicitly in extension release notes.</p>
 <table>
 <thead><tr><th>Version</th><th>Date</th><th>Note</th></tr></thead>
-<tbody><tr><td>v1.0.0</td><td>2026-10-16</td><td>First public release.</td></tr></tbody>
+<tbody>
+<tr><td>v1.0.1</td><td>2026-10-19</td><td>Removed the direct Google Analytics transport and the packaged write secret (statistics channel disabled, zero outbound traffic); any future re-enabling only via a self-operated anonymous relay. Removed waitlist email collection; the injected script is now a prebuilt packaged file and externally exposed web_accessible_resources were removed; host permissions narrowed to the single Volcengine Ark domain.</td></tr>
+<tr><td>v1.0.0</td><td>2026-10-16</td><td>First public release.</td></tr>
+</tbody>
 </table>
 
 <h2 id="contact">8. Contact</h2>

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_app_name__",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "__MSG_app_description__",
   "minimum_chrome_version": "110",
   "default_locale": "en",
@@ -20,45 +20,11 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://ark.cn-beijing.volces.com/*",
-    "https://www.google-analytics.com/*"
+    "https://ark.cn-beijing.volces.com/*"
   ],
   "optional_host_permissions": [
     "https://*/*",
     "http://*/*"
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "src/content/content-main.js",
-        "src/content/adapters.js",
-        "src/core/*.js",
-        "src/config/*.js",
-        "src/data/*.json"
-      ],
-      "matches": [
-        "https://*.tiktok.com/*",
-        "https://*.shopee.com/*",
-        "https://*.shopee.cn/*",
-        "https://*.shopee.com.my/*",
-        "https://*.shopee.sg/*",
-        "https://*.shopee.co.th/*",
-        "https://*.shopee.co.id/*",
-        "https://*.shopee.ph/*",
-        "https://*.shopee.vn/*",
-        "https://*.shopee.com.tw/*",
-        "https://*.shopee.com.br/*",
-        "https://*.shopee.com.mx/*",
-        "https://*.shp.ee/*",
-        "https://sellercentral.amazon.com/*",
-        "https://sellercentral.amazon.co.uk/*",
-        "https://sellercentral.amazon.de/*",
-        "https://sellercentral.amazon.co.jp/*",
-        "https://mail.google.com/*",
-        "https://*/*",
-        "http://*/*"
-      ]
-    }
   ],
   "action": {
     "default_popup": "src/popup/popup.html",

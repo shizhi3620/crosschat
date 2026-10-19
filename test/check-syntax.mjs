@@ -19,6 +19,7 @@ function walk(dir) {
 }
 walk(join(root, 'src'));
 walk(join(root, 'test'));
+walk(join(root, 'scripts'));
 
 let failed = 0;
 for (const file of targets) {

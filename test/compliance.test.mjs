@@ -53,6 +53,44 @@ test('合规: 站外支付导流 block（PayPal/支付宝/西联/银行转账）
   }
 });
 
+test('合规: 东南亚/南美本地支付渠道 block（评审 P1-4 原始复现 + 同区渠道）', () => {
+  const cases = [
+    'Thanh toan qua ZaloPay nhe',          // 评审原复现：\bzalo\b 放行了 zalopay
+    'Thanh toán qua MoMo nhé',
+    'bisa bayar pakai GoPay',
+    'silakan bayar lewat DANA',
+    'pague via pix, chave: 1198765-4321',
+    'pay via PromptPay',
+    'top up with TrueMoney',
+  ];
+  for (const t of cases) {
+    const r = scan(t);
+    eq(r.verdict, 'block', `should block: ${t} -> ${JSON.stringify(r.findings.map((f) => f.ruleId))}`);
+    ok(hasRule(r, 'offsite_payment'), t);
+  }
+});
+
+test('合规: DANA/OVO/Pix 普通词语境不误伤（品牌词消歧，评审 P1-4）', () => {
+  const benign = [
+    'Hi Dana, thanks for contacting us about your order.',
+    'Vou enviar um ovo de Páscoa como brinde junto com o pedido.',
+    'Your parcel is in transit; please contact us through Shopee chat.',
+  ];
+  for (const t of benign) {
+    const r = scan(t);
+    ok(!hasRule(r, 'offsite_payment'), `false offsite_payment: ${t}`);
+    eq(r.verdict, 'pass', `unexpected finding: ${t} -> ${JSON.stringify(r.findings.map((f) => f.ruleId))}`);
+  }
+});
+
+test('合规: 越南/巴西手机号进入电话规则（P1-3 与 PII 同形）', () => {
+  const r = scan('liên hệ sđt 0901 234 567 để được hỗ trợ');
+  eq(r.verdict, 'block');
+  ok(hasRule(r, 'contact_phone_email'));
+  const r2 = scan('ligue para (11) 98765-4321');
+  ok(hasRule(r2, 'contact_phone_email'));
+});
+
 test('合规: 加密货币 warn（不直接 block）', () => {
   const r = scan('we can accept USDT for this order');
   eq(r.verdict, 'warn');

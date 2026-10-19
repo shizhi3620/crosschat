@@ -3,7 +3,8 @@
  *
  * 过审关键：扩展不再在 manifest 静态声明全站 content_scripts；
  * 只有用户在 UI 里显式添加站点（chrome.permissions.request 用户手势授权）后，
- * 才用 chrome.scripting.registerContentScripts 向该 origin 注入 content-loader.js；
+ * 才用 chrome.scripting.registerContentScripts 向该 origin 注入预打包的经典脚本
+ * content.bundle.js（scripts/bundle-content.mjs 生成，零依赖、无需 WAR）；
  * 移除站点立即 unregister，并可选 revoke origin 权限。
  *
  * 本模块纯逻辑部分（patterns 校验、描述符构造、存储增删）可在 node 单测。
@@ -12,7 +13,8 @@ import { localStore } from './storage.js';
 import { STORAGE_KEYS } from './defaults.js';
 
 export const CONTENT_SCRIPT_ID = 'crosschat-user-sites';
-export const LOADER_PATH = 'src/content/content-loader.js';
+/** 由 scripts/bundle-content.mjs 生成；改动 content-main/pii/adapters 后须 npm run build */
+export const CONTENT_BUNDLE_PATH = 'src/content/content.bundle.js';
 
 /**
  * 预置站点。match pattern 必须是 Chrome 合法形态
@@ -95,9 +97,10 @@ export function buildRegisteredScripts(patterns) {
   return [{
     id: CONTENT_SCRIPT_ID,
     matches,
-    js: [LOADER_PATH],
+    js: [CONTENT_BUNDLE_PATH],
     runAt: 'document_idle',
-    allFrames: false,
+    // Shopee/TikTok 聊天窗可能在同源 iframe 内；每帧独立 bootstrap（HOST_ID 去重）
+    allFrames: true,
   }];
 }
 

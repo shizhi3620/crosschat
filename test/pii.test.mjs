@@ -28,6 +28,21 @@ test('PII: 有效信用卡号脱敏（Luhn），无效数字不脱敏', () => {
   ok(no.entities.length === 0, 'order number not PII at all');
 });
 
+test('PII: 越南/巴西/泰国/印尼本地手机号（评审 P1-3 原始复现）', () => {
+  ok(detectPii('SĐT của mình là 0901 234 567 nhé').some((e) => e.type === 'PHONE'), 'VN 0901 234 567');
+  ok(detectPii('ligue para (11) 98765-4321').some((e) => e.type === 'PHONE'), 'BR (11) 98765-4321');
+  ok(detectPii('โทร 081-234-5678').some((e) => e.type === 'PHONE'), 'TH 081-234-5678');
+  ok(detectPii('hubungi 0812-3456-7890').some((e) => e.type === 'PHONE'), 'ID 0812-3456-7890');
+  ok(detectPii('0901234567').some((e) => e.type === 'PHONE'), 'VN 无分隔符');
+});
+
+test('PII: 长订单号/追踪号不能被新电话正则误伤', () => {
+  for (const t of ['order #9876543210 qty 1', 'tracking 1234567890123456 has updated', '商品编号 0912 3456 7890 已发货']) {
+    const r = redact(t);
+    ok(!r.entities.some((e) => e.type === 'PHONE'), `误判电话: ${t} -> ${JSON.stringify(r.entities)}`);
+  }
+});
+
 test('PII: 同值多次出现复用占位符，还原一致', () => {
   const { text, entities } = redact('a@b.com and a@b.com');
   eq((text.match(/\[EMAIL_1\]/g) || []).length, 2);

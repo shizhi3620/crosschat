@@ -90,6 +90,36 @@ export function createArkClient(config, { fetchImpl } = {}) {
   return { chat, submitBatch, batchReservation: BATCH_RESERVATION };
 }
 
+/**
+ * 把方舟/网络层错误归因成卖家能看懂的中文排障提示（评审 P0-3）。
+ * 保留 HTTP 状态码，调用方可以直接展示；无法识别时回退原文。
+ */
+export function describeArkError(err) {
+  const raw = String(err?.message || err || '未知错误');
+  const status = raw.match(/Ark API\s+(\d{3})/)?.[1] || raw.match(/\b([1-5]\d{2})\b/)?.[1] || '';
+  switch (status) {
+    case '401':
+      return '连接失败（401）：API Key 无效或已被吊销。请重新到火山方舟控制台「API Key 管理」复制完整 Key（以粘贴时无多余空格为准）；注意要填方舟 API Key，不是火山引擎主账号的 Access Key。';
+    case '403':
+      return '连接失败（403）：服务器拒绝调用。常见原因：账号未完成实名认证、账户欠费/余额不足、或该 Key 未被授权使用所选模型（接入点）。';
+    case '404':
+      return '连接失败（404）：接口地址或模型 ID 不存在。请检查 Base URL 是否为 https://ark.cn-beijing.volces.com/api/v3 ，以及 L1/L2 模型（接入点）ID 是否与方舟控制台「在线推理」里开通的完全一致。';
+    case '429':
+      return '连接失败（429）：触发限流或配额不足（如新账号免费额度用尽、TPM/RPM 超限）。稍后重试，或到方舟控制台查看配额与计费状态。';
+    default:
+      if (/^5\d\d$/.test(status)) {
+        return `连接失败（方舟服务端 ${status}）：火山方舟暂时异常，稍后重试；若持续失败请看方舟控制台公告。`;
+      }
+      if (/abort|timeout|timed out|超时/i.test(raw)) {
+        return '连接超时：请求在设定时间内没有返回。北京节点通常国内直连即可，请检查网络/代理后重试，必要时在设置里调大超时时间。';
+      }
+      if (/failed to fetch|networkerror|load failed|network request/i.test(raw)) {
+        return '网络不可达：浏览器没能连上 ark.cn-beijing.volces.com，请检查网络、代理切换（国内一般不要挂海外代理）与公司防火墙。';
+      }
+      return `连接失败：${raw}`;
+  }
+}
+
 /** 宽容解析模型输出：纯 JSON 直接解析；夹带前后缀文本时截取首个 {...} */
 export function parseStructured(content) {
   if (!content) return null;

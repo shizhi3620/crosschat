@@ -1,5 +1,10 @@
 /**
- * 匿名使用遥测（v1.0.0 隐私设计，GA4 Measurement Protocol v2）。
+ * 匿名使用遥测（v1.0.1：中转架构，评审 P1-6）。
+ *
+ * v1.0.0 直连 GA4 Measurement Protocol 的做法要求 apiSecret 随包分发，公开安装包
+ * 无法保密，v1.0.1 已移除客户端 secret：endpoint 留空时遥测整体停发；将来恢复时
+ * endpoint 必须是 board 自建匿名中转（服务端持有 GA secret），客户端只 POST
+ * 白名单事件 JSON。代码层拒绝直连 google-analytics.com，防止配置回退。
  *
  * 隐私硬约束（与隐私政策口径一致，测试锁定）：
  *  - 事件白名单：install / daily_active / draft_generated / draft_adopted，
@@ -50,28 +55,44 @@ export function sanitizeParams(eventName, params) {
   return out;
 }
 
+/**
+ * 仅当存在一个非 GA 官方端点的 https 匿名中转、且 measurementId 形态正常时才算配置好。
+ * 任何情况下都不允许客户端直连 GA（那会重新把 secret 暴露进安装包，P1-6）。
+ */
 export function isConfigured(cfg = TELEMETRY) {
-  return Boolean(
-    cfg.measurementId
-      && cfg.measurementId.startsWith('G-')
-      && cfg.measurementId !== 'G-XXXXXXXXXX'
-      && cfg.apiSecret
-      && cfg.apiSecret !== '__SET_AT_PACKAGING__',
-  );
+  if (!cfg || !cfg.endpoint || typeof cfg.endpoint !== 'string') return false;
+  let url;
+  try {
+    url = new URL(cfg.endpoint);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== 'https:') return false;
+  if (url.hostname === 'www.google-analytics.com' || url.hostname === 'google-analytics.com') {
+    return false;
+  }
+  return Boolean(cfg.measurementId && /^G-[\w-]+$/.test(cfg.measurementId) && cfg.measurementId !== 'G-XXXXXXXXXX');
 }
 
 function utcDay(nowMs) {
   return new Date(nowMs).toISOString().slice(0, 10);
 }
 
-export async function sendToGa({ cfg, clientId, name, params, fetchImpl }) {
-  const url = `${cfg.endpoint}?measurement_id=${encodeURIComponent(cfg.measurementId)}&api_secret=${encodeURIComponent(cfg.apiSecret)}`;
-  const res = await fetchImpl(url, {
+/**
+ * 向 board 自建匿名中转投递单条事件。密钥只存在于中转服务端，客户端请求里没有、
+ * 也永远不应该有任何 secret。非 2xx 抛错由上层静默吞掉。
+ */
+export async function sendToRelay({ cfg, clientId, name, params, fetchImpl }) {
+  const res = await fetchImpl(cfg.endpoint, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ client_id: clientId, events: [{ name, params }] }),
+    body: JSON.stringify({
+      measurement_id: cfg.measurementId,
+      client_id: clientId,
+      events: [{ name, params }],
+    }),
   });
-  if (!res.ok) throw new Error(`GA ${res.status}`);
+  if (!res.ok) throw new Error(`Relay ${res.status}`);
 }
 
 /**
@@ -90,7 +111,7 @@ export class Telemetry {
     this.cfg = cfg;
     this.now = now;
     this.idFactory = idFactory;
-    this.sender = sender || ((p) => sendToGa({ ...p, fetchImpl: globalThis.fetch }));
+    this.sender = sender || ((p) => sendToRelay({ ...p, fetchImpl: globalThis.fetch }));
   }
 
   async state() {

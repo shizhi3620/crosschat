@@ -8,6 +8,15 @@ test('知识库: tokenize 兼容中英文', () => {
   ok(zh.includes('物流') && zh.includes('多久'), zh.join(','));
 });
 
+test('知识库: tokenize 保留越南语/葡语变音符号（评审 P1-2，旧 a-z 正则会吞掉）', () => {
+  const vn = tokenize('đơn hàng giao mấy ngày rồi?');
+  ok(vn.includes('đơn') && vn.includes('hàng') && vn.includes('ngày'), vn.join(','));
+  const pt = tokenize('ainda não recebi meu pedido, qual o prazo?');
+  ok(pt.includes('não') && pt.includes('recebi') && pt.includes('prazo'), pt.join(','));
+  // 弯引号撇号不拆词
+  ok(tokenize('don’t worry').includes('don’t'));
+});
+
 test('知识库: Top-K 检索按相关度排序且不超过 3 条', () => {
   const hits = search(kb, 'where is my order and the tracking number?', { intent: 'logistics', topK: 3 });
   ok(hits.length <= 3);

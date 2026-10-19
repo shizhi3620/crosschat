@@ -13,8 +13,10 @@ import './quota.test.mjs';
 import './history.test.mjs';
 import './metering.test.mjs';
 import './demo-engine.test.mjs';
+import './ark-client.test.mjs';
 import './pipeline.test.mjs';
 import './telemetry.test.mjs';
 import './sites.test.mjs';
+import './bundle.test.mjs';
 
 await runAll();

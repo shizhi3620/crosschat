@@ -5,7 +5,7 @@ import { test, ok, eq } from './harness.mjs';
 import {
   SITE_PRESETS,
   CONTENT_SCRIPT_ID,
-  LOADER_PATH,
+  CONTENT_BUNDLE_PATH,
   isValidPattern,
   normalizePattern,
   buildRegisteredScripts,
@@ -53,9 +53,10 @@ test('站点: buildRegisteredScripts 去重/过滤，空集返回空', () => {
   const scripts = buildRegisteredScripts(['https://a.com/*', 'https://a.com/*', 'bad-pattern']);
   eq(scripts.length, 1);
   eq(scripts[0].id, CONTENT_SCRIPT_ID);
-  eq(scripts[0].js, [LOADER_PATH]);
+  eq(scripts[0].js, [CONTENT_BUNDLE_PATH]);
   eq(scripts[0].matches, ['https://a.com/*']);
   eq(scripts[0].runAt, 'document_idle');
+  eq(scripts[0].allFrames, true); // iframe 聊天窗也要注入（P0-2 附带项）
   eq(buildRegisteredScripts([]), []);
 });
 

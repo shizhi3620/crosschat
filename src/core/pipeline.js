@@ -83,6 +83,9 @@ export async function runPipeline({
     entities,
     safeText,
     demo: config.mode !== 'byok',
+    // 占位内容（演示引擎 L1/L2 输出 / API 失败空草稿）不可采纳外发（P1-5）；
+    // L0 FAQ 是卖家自己的知识库模板，即使未配 Key 也不是占位内容。
+    placeholder: false,
     ts: started,
   };
 
@@ -93,6 +96,7 @@ export async function runPipeline({
   let cacheHit = false;
   let translated = null;
   let error = null;
+  let placeholder = false;
 
   // 4) 生成
   if (decision.level === LEVEL.L0) {
@@ -136,11 +140,14 @@ export async function runPipeline({
       }
     } catch (e) {
       error = e.message || String(e);
+      placeholder = true;
     }
   } else if (config.mode === 'byok' && !clients.ark) {
     error = 'BYOK 模式未初始化 Ark 客户端';
+    placeholder = true;
   } else {
-    // 演示引擎（离线）
+    // 演示引擎（离线）：输出全部是占位内容，界面必须红底禁采纳（P1-5）
+    placeholder = true;
     if (task === 'translate') {
       translated = demoTranslate(safeText);
       draft = translated;
@@ -179,6 +186,7 @@ export async function runPipeline({
 
   return {
     ...base,
+    placeholder,
     draft,
     translated,
     riskFlags,

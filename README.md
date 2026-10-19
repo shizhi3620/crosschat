@@ -7,8 +7,17 @@
 无服务器、数据默认不出本机：BYOK（自带火山方舟 API Key，浏览器直连服务商）+ 无需 Key 的内置离线演示双模式。
 
 - 🌐 官网/安装：https://shizhi3620.github.io/crosschat/
+- 📖 [安装教程（Edge / 国内离线安装 / BYOK 图文配置）](docs/install.html)
 - 📄 [隐私政策](docs/privacy.html) · [服务条款](docs/terms.html) · [支持与 FAQ](docs/support.html)
-- 🧩 [Chrome Web Store 安装](https://chromewebstore.google.com/detail/crosschat-%E2%80%94-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh)（要求 Chrome 110+）
+- 🧩 [Chrome Web Store 安装](https://chromewebstore.google.com/detail/crosschat-%E2%80%94-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh)（Chrome / Edge 110+）
+
+## v1.0.1 更新
+
+- 演示/报错占位内容红底禁采纳——占位文案不可能被误填入发送框；
+- 「测试连接」改为不保存即测，401/403/404/超时给中文原因，失败不覆盖已保存配置；
+- 匿名统计通道完全停用（无统计请求、包内无密钥、无 GA 主机权限），未来仅经自建匿名中继恢复；
+- 移除等候名单邮箱收集；删除对外暴露的 `web_accessible_resources`，主机权限收敛为火山方舟单域名；
+- 新增越南/巴西/泰国/印尼手机号识别与 ZaloPay/MoMo/GoPay/DANA/Pix/PromptPay 本地钱包合规词。
 
 ## 工作方式
 
@@ -21,9 +30,9 @@
 
 - **按需授权站点**：不申请「读取所有网站数据」。内容脚本通过 `optional_host_permissions` + `chrome.scripting` 动态注册，只在你明确添加的域上注入，移除即停。
 - **Key 不出本机**：BYOK Key 仅存于 `chrome.storage.local`，请求从浏览器直连火山方舟，不经过任何中间服务器。
-- **PII 入模前脱敏**：邮箱 / 电话 / 银行卡 / 地址在发给模型前替换为占位符，采纳时在本机还原。
-- **合规护栏**：站外支付、交换联系方式、好评利诱、违规承诺等草稿会被警告或禁止填入。
-- **匿名统计可一键关闭**：仅 4 个计数事件（install / daily_active / draft_generated / draft_adopted）+ 3 个枚举字段（模型级别、平台大类、模式），不含消息正文。详见[隐私政策](docs/privacy.html)。
+- **PII 入模前脱敏**：邮箱 / 电话（含越南、巴西、泰国、印尼号码格式）/ 银行卡 / 地址在发给模型前替换为占位符，采纳时在本机还原。
+- **合规护栏**：站外支付（含 ZaloPay、MoMo、GoPay、DANA、巴西 Pix、泰国 PromptPay 等本地钱包）、交换联系方式、好评利诱、违规承诺等草稿会被警告或禁止填入。
+- **匿名统计 v1.0.1 起停用**：扩展不发出任何统计请求、包内不含统计密钥；代码仅保留 4 个计数事件（install / daily_active / draft_generated / draft_adopted）+ 3 个枚举字段（模型级别、平台大类、模式）的白名单定义，未来经匿名中继恢复时默认关闭。详见[隐私政策](docs/privacy.html)。
 - **无账号、无广告、不卖数据**；本地数据卸载即清除。
 
 ## 本地加载（开发者）
@@ -33,18 +42,20 @@
 3. BYOK：设置页填入火山方舟 Base URL / API Key / L1、L2 接入点 ID；也可热切换到其他 OpenAI 兼容接入点。
 
 ```sh
-npm test       # 70 个 node 单测
+npm test       # 82 个 node 单测
 npm run check  # 全量 node --check + JSON 校验
+npm run build  # 重新打包动态内容脚本 bundle（见下）
 ```
 
-无构建步骤：纯 ESM + 静态 HTML，`src/` 即运行时代码。
+运行时代码为纯 ESM + 静态 HTML；唯一的构建产物 `src/content/content.bundle.js` 已预编译并提交，直接加载无需构建——仅当你改动 `src/content/` 下文件后才需要重跑 `npm run build`。
 
 ## 架构
 
 ```
 manifest.json                        MV3：SW(module) + 动态内容脚本 + popup/options/dashboard
 src/background/service-worker.js     消息总线、模型调用、配额判定、计量落盘
-src/content/                         动态 loader + Shadow DOM 浮动部件 + 站点适配器（含通用手动兜底）
+src/content/                         动态注册的预编译经典脚本 bundle（content.bundle.js，npm run build 生成）
+                                     + Shadow DOM 浮动部件 + 站点适配器（含通用手动兜底）
 src/core/                            纯逻辑 ESM（node 与扩展共用、零 DOM）：
                                      默认配置/存储、PII、合规、知识库、分级路由、历史压缩、
                                      模型客户端、离线演示引擎、配额、计量、成本模型、遥测
@@ -58,8 +69,9 @@ test/                                node 单测与全量语法检查
 
 ## 路线图（非承诺）
 
-- Edge（同 MV3 架构）版本；
-- 可选付费托管额度（等候名单，仅自愿登记）；
+- Edge Add-ons 独立上架包（提交中；当前已可在 Edge 中以「允许其他应用商店扩展」或开发者模式使用）；
+- 可选付费托管额度（真实登记表单就绪前不收集邮箱）；
+- 匿名统计自建匿名中继（默认关闭、可一键退出）；
 - 真实站点选择器按用户反馈校准（通用手动兜底始终保留）。
 
 ## 许可证
@@ -75,8 +87,17 @@ AI-tiered multilingual reply drafting for cross-border seller chats, right insid
 No server; data stays local by default. BYOK (bring your own Volcengine Ark API key — browser-to-provider) plus a built-in offline demo that needs no key at all.
 
 - 🌐 Site/install: https://shizhi3620.github.io/crosschat/
+- 📖 [Install guide](docs/install.html) (Edge, offline install behind the GFW, illustrated BYOK setup)
 - 📄 [Privacy Policy](docs/privacy.html) · [Terms](docs/terms.html) · [Support & FAQ](docs/support.html)
-- 🧩 [Install on the Chrome Web Store](https://chromewebstore.google.com/detail/crosschat-%E2%80%94-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh) (Chrome 110+).
+- 🧩 [Install on the Chrome Web Store](https://chromewebstore.google.com/detail/crosschat-%E2%80%94-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh) (Chrome / Edge 110+).
+
+## What's new in v1.0.1
+
+- Demo/failure placeholder output is shown with a red warning and cannot be adopted into the reply box;
+- "Test Connection" now probes without saving and explains 401/403/404/timeout failures; a failed test never overwrites saved settings;
+- The anonymous statistics channel is fully disabled (no analytics requests, no secret in the package, no GA host permission); any future re-enabling goes only through a self-operated anonymous relay;
+- Waitlist email collection removed; externally exposed `web_accessible_resources` deleted; host permissions narrowed to the single Volcengine Ark domain;
+- Added Vietnam/Brazil/Thailand/Indonesia phone-number detection and ZaloPay/MoMo/GoPay/DANA/Pix/PromptPay local-wallet compliance checks.
 
 ## How it works
 
@@ -89,9 +110,9 @@ No server; data stays local by default. BYOK (bring your own Volcengine Ark API 
 
 - **Per-site authorization**, no "read all websites" permission: content scripts register dynamically only on domains you add, and unregister on removal.
 - **Key never leaves your device**: stored in `chrome.storage.local`; model requests go straight from the browser to the provider.
-- **PII masked before the model** (emails, phones, card numbers, addresses) and restored locally on adopt.
-- **Compliance guardrails** flag or block off-platform payment, exchanged contacts, review incentives and policy-violating promises.
-- **Opt-out anonymous counters only**: 4 events (install / daily_active / draft_generated / draft_adopted) with 3 enum fields (model tier, coarse platform class, mode), never message text. See the [Privacy Policy](docs/privacy.html).
+- **PII masked before the model** (emails, phones — including Vietnam/Brazil/Thailand/Indonesia number formats — card numbers, addresses) and restored locally on adopt.
+- **Compliance guardrails** flag or block off-platform payment (including local wallets/rails such as ZaloPay, MoMo, GoPay, DANA, Brazil's Pix and Thailand's PromptPay), exchanged contacts, review incentives and policy-violating promises.
+- **Statistics disabled since v1.0.1**: the extension sends no analytics requests and ships with no analytics secret; the code only retains a whitelist definition for 4 events (install / daily_active / draft_generated / draft_adopted) with 3 enum fields (model tier, coarse platform class, mode). If re-enabled via a self-operated anonymous relay, it defaults to off. See the [Privacy Policy](docs/privacy.html).
 - No account, no ads, no data sales; local data is removed on uninstall.
 
 ## Development
@@ -99,11 +120,12 @@ No server; data stays local by default. BYOK (bring your own Volcengine Ark API 
 Load unpacked from `chrome://extensions` (Developer mode). Default mode is the offline demo; add your own Ark key in the options page for real drafts.
 
 ```sh
-npm test       # 70 node unit tests
+npm test       # 82 node unit tests
 npm run check  # node --check across all JS + JSON validation
+npm run build  # repackage the dynamic content-script bundle (see below)
 ```
 
-No build step: plain ESM and static HTML; `src/` is the runtime.
+The runtime is plain ESM plus static HTML. The single build artifact, `src/content/content.bundle.js`, is prebuilt and committed, so loading the unpacked extension needs no build — run `npm run build` only after editing files under `src/content/`.
 
 ## License
 

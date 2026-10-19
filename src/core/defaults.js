@@ -10,9 +10,10 @@
 export const STORAGE_KEYS = {
   config: 'crosschat.config.v1',
   events: 'crosschat.meter.v1',
-  // 匿名遥测状态 {clientId,lastDay,enabled}、用户自选站点 patterns、托管额度等待名单（本机）
+  // 匿名遥测状态 {clientId,lastDay,enabled}、用户自选站点 patterns
   telemetry: 'crosschat.telemetry.v1',
   sites: 'crosschat.sites.v1',
+  // v1.0.0 旧版本机意向登记（P1-8 已停止收集；保留键仅为了不读出旧数据时崩溃）
   waitlist: 'crosschat.waitlist.v1',
 };
 

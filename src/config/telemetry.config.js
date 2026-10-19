@@ -1,24 +1,28 @@
 /**
- * 遥测与留资配置（v1.0.0 隐私设计）。
+ * 遥测配置（v1.0.1 安全修订，对应评审 P1-6）。
  *
- * 打包前（C2d）由 board 提供真实值替换占位符：
- *  - measurementId：GA4 Measurement ID（G- 开头，非保密，可在 issue 评论传递）
- *  - apiSecret：Measurement Protocol API secret（保密，只进商店 ZIP，
- *    绝不进入公开 git 提交；公开仓库保留本 example 形态，真值文件 .gitignore）。
+ * v1.0.0 曾把 GA4 Measurement Protocol 的 apiSecret 打进公开安装包：
+ * MP 调用必须在 URL 里带 secret，而安装包任何人都能解包——密钥等于公开，
+ * 任何人都可向该 GA 资源伪造命中。因此 v1.0.1 起：
+ *  - 客户端不再保存任何 GA apiSecret，也不直连 google-analytics.com；
+ *  - endpoint 留空期间遥测完全停发（零外呼，国内/海外网络环境一致），
+ *    isConfigured() 返回 false，track* 全部静默跳过；
+ *  - 将来恢复统计时，endpoint 必须指向 board 自建的匿名中转：客户端只 POST
+ *    白名单事件 JSON，由中转在服务端持有 GA measurement id + apiSecret；
+ *  - measurementId 本身不是保密信息（网页版 GA 本来就公开），此处保留仅为记录归属。
  *
- * 占位符未替换时遥测自动停发（见 telemetry.js isConfigured），开发与测试零外呼。
+ * 必须由 board 手动完成、代码无法替代的动作：
+ *  1) 立即在 GA4 管理后台吊销 v1.0.0 随包泄露的那串 api_secret（事件级别作废）；
+ *  2) 部署匿名中转后把 endpoint 改成中转 https 地址，并在 manifest.json 的
+ *     host_permissions 中登记该 origin（SW 跨域 fetch 需要）；
+ *  3) 中转侧只接受 telemetry.js 白名单事件与参数，拒绝任何正文/PII/URL 字段并限流。
  */
 export const TELEMETRY = {
-  endpoint: 'https://www.google-analytics.com/mp/collect',
-  measurementId: 'G-XXXXXXXXXX',
-  apiSecret: '__SET_AT_PACKAGING__',
+  /** 匿名中转地址；为空字符串 = 遥测停发。禁止直接填 google-analytics.com。 */
+  endpoint: '',
+  /** 非保密标识，仅记录归属；无 endpoint 时不会产生任何网络请求。 */
+  measurementId: 'G-Y1ZP2M0BX6',
 };
 
-/**
- * 托管额度等待名单的表单 URL（可选项）。
- * board 后续挂 Google Form / 其他表单后在此填写；为空时 onboarding 退化为 mailto 收集。
- */
-export const WAITLIST_FORM_URL = '';
-
-/** onboarding/options 里的联系邮箱占位（board 可在落地页上线后替换） */
+/** onboarding/隐私页里的联系邮箱（board 可替换） */
 export const CONTACT_EMAIL = 'crosschat.app@gmail.com';

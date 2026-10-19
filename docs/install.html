@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>安装教程 · Install Guide — 跨海聊 CrossChat</title>
+<meta name="description" content="跨海聊 CrossChat 安装与 BYOK 配置图文教程：Chrome Web Store、Edge、国内离线安装（开发者模式加载已解压扩展），火山方舟 Key 三步开通与 401/403/404 排错。" />
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body data-lang="zh">
+<div class="langbar"><div class="container">
+  <button data-lang="zh">中文</button><button data-lang="en">English</button>
+</div></div>
+
+<nav class="nav"><div class="container">
+  <a class="brand" href="index.html">跨海聊 CrossChat</a>
+  <div class="links">
+    <a href="index.html#features" class="zh">功能</a><a href="index.html#features" class="en">Features</a>
+    <a href="install.html" class="zh">安装教程</a><a href="install.html" class="en">Install</a>
+    <a href="support.html">FAQ</a>
+    <a href="privacy.html" class="zh">隐私</a><a href="privacy.html" class="en">Privacy</a>
+  </div>
+</div></nav>
+
+<div class="legal">
+<!-- ============ 中文 ============ -->
+<div class="zh">
+<h1>安装与配置教程</h1>
+<p class="lead">v1.0.1 · 三种安装方式 + 火山方舟 BYOK 三步开通。遇到问题发邮件 <a href="mailto:crosschat.app@gmail.com">crosschat.app@gmail.com</a>。</p>
+
+<h2>方式一：Chrome Web Store（推荐，可自动更新）</h2>
+<p>需要 Chrome 110+ 且网络能访问 Chrome Web Store。</p>
+<ol class="steps">
+  <li>打开商店页：<a href="https://chromewebstore.google.com/detail/crosschat-%E2%80%94-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh" target="_blank" rel="noopener">CrossChat — AI 客服回复助手</a>，点击「添加至 Chrome」。</li>
+  <li>安装后自动打开首启引导页：先看 30 秒离线演示，再按需添加客服站点。</li>
+  <li>商店版后续自动更新，无需手动操作。</li>
+</ol>
+
+<h2>方式二：Microsoft Edge</h2>
+<p>Edge 加载项（Add-ons）商店版本正在提交审核，上架后会在此页更新链接。在此之前有两个临时办法：</p>
+<ol class="steps">
+  <li>在 <code>edge://settings/system</code> 打开「允许来自其他应用商店的扩展」，然后按方式一从 Chrome Web Store 安装（仍需网络能访问商店）；或</li>
+  <li>直接使用方式三的开发者模式加载，Edge 同样支持。</li>
+</ol>
+
+<h2 id="offline">方式三：离线安装（访问不了商店时，开发者模式加载已解压扩展）</h2>
+<div class="note info">说明：Chrome 已禁止直接拖入 .crx 安装第三方扩展，离线安装统一使用「加载已解压的扩展程序」。此方式不经过商店，<strong>不会自动更新</strong>，新版本需手动替换文件（同一文件夹覆盖可保留配置与数据）。</div>
+<ol class="steps">
+  <li>获取安装包（任选其一）：<br />
+    · GitHub 仓库主页 <a href="https://github.com/shizhi3620/crosschat" target="_blank" rel="noopener">github.com/shizhi3620/crosschat</a> → 绿色「Code」按钮 →「Download ZIP」；<br />
+    · 或直接下载：<a href="https://github.com/shizhi3620/crosschat/archive/refs/heads/main.zip" target="_blank" rel="noopener">crosschat-main.zip</a>。<br />
+    打包所需文件（含预编译的注入脚本）都已在仓库内，<strong>无需安装 Node、无需自行构建</strong>。
+  </li>
+  <li>把 ZIP 解压到一个<strong>固定目录</strong>（之后不要删除或移动，否则扩展会失效），解压后应能看到 <code>manifest.json</code> 与 <code>src/</code> 文件夹。</li>
+  <li>浏览器地址栏打开 <code>chrome://extensions</code>（Edge 为 <code>edge://extensions</code>），打开右上角「开发者模式」。</li>
+  <li>点「加载已解压的扩展程序」，选择包含 <code>manifest.json</code> 的那个文件夹。</li>
+  <li>出现跨海聊图标即安装成功；浏览器顶部「开发者模式扩展」提示是 Chrome 的正常安全提示。</li>
+</ol>
+<p class="muted">如果 github.com 也无法访问：可以换网络时点按上面的 ZIP 链接预先下载，或发邮件到 <a href="mailto:crosschat.app@gmail.com">crosschat.app@gmail.com</a> 索取离线包；国内镜像下载点正在准备中。</p>
+
+<h2 id="byok">配置你自己的火山方舟 Key（BYOK，三步）</h2>
+<p>没有 Key 也能先用离线演示；需要真实 AI 草拟时再做下面三步。Key 只保存在你本机的 <code>chrome.storage.local</code>，请求从浏览器直连火山方舟北京节点，不经过扩展作者的服务器。</p>
+<ol class="steps">
+  <li><strong>注册并实名：</strong>打开火山方舟控制台 <a href="https://console.volcengine.com/ark" target="_blank" rel="noopener">console.volcengine.com/ark</a>，注册火山引擎账号并完成实名认证（个人实名即可）。</li>
+  <li><strong>开通模型：</strong>在「在线推理」里开通要用的模型。默认配置是轻量模型 <code>doubao-seed-2-0-mini</code>（翻译、常规回复，便宜）+ 旗舰模型 <code>doubao-seed-2-1-pro</code>（只有纠纷/差评等难单才调用），把模型或接入点 ID 分别复制到设置页的 L1、L2 输入框。</li>
+  <li><strong>创建并测试 Key：</strong>在控制台「API Key 管理」创建一个 Key，粘进扩展设置页的 API Key 框，点「<strong>测试连接（不保存，即填即测）</strong>」。通过后再点页面底部「保存全部设置」正式生效；测试失败不会改动你已保存的配置。</li>
+</ol>
+<div class="note ok">
+  费用：按你自己的火山引擎账户后付费，用多少算多少，扩展不收钱。按内置成本模型（2026-10-15 官方单价口径）估算，典型客服会话每处理 1,000 条约 ¥3.7～¥73.5，常规混合（约六成缓存命中）约 ¥17.7，实际以<a href="https://docs.volcengine.com/docs/ark/model-pricing" target="_blank" rel="noopener">方舟价目表</a>与你的账单为准。
+</div>
+
+<h3>测试连接报错怎么看？</h3>
+<ul>
+  <li><strong>401</strong>：API Key 无效或填错。重新到「API Key 管理」复制完整 Key；注意要的是方舟 API Key，不是火山引擎主账号的 AccessKey。</li>
+  <li><strong>403</strong>：账号未实名、账户欠费/余额不足，或该 Key 没有所选模型的调用权限。</li>
+  <li><strong>404</strong>：Base URL 或模型 ID 不一致。默认 Base URL 为 <code>https://ark.cn-beijing.volces.com/api/v3</code>，模型 ID 必须与「在线推理」里已开通的完全一致。</li>
+  <li><strong>429</strong>：触发限流或免费额度用尽，稍后再试或查看方舟配额。</li>
+  <li><strong>超时 / 连不上</strong>：检查网络与代理——北京节点国内一般直连即可，挂海外代理反而可能失败；公司网络请放行 <code>ark.cn-beijing.volces.com</code>。</li>
+</ul>
+
+<h2>安装后 30 秒上手</h2>
+<ol class="steps">
+  <li>首启引导页点「打开演示页面」，在模拟收件箱里跑通：捕获买家消息 → 翻译 / 草拟 → 合规与 PII 检查 → 采纳。</li>
+  <li>在「管理我的客服站点」里添加你实际使用的卖家后台 / CRM / 邮箱域名并授权——不授权的站点完全不注入。</li>
+  <li>打开真实客服页面，选中买家消息，点工具栏的跨海聊图标开始。<strong>任何时候扩展都只填草稿，平台发送按钮由你亲自点击。</strong></li>
+</ol>
+<div class="note info">演示模式下的占位译文/草稿会红底提示「切勿外发」且无法采纳，配置真实 Key 后才会产生可填入发送框的内容。</div>
+
+<p>更多问题见 <a href="support.html">常见问题 FAQ</a>；数据怎么处理见 <a href="privacy.html">隐私政策</a>。</p>
+</div>
+
+<!-- ============ English ============ -->
+<div class="en">
+<h1>Install &amp; setup guide</h1>
+<p class="lead">v1.0.1 · Three install paths plus a three-step Volcengine Ark BYOK setup. Stuck? Email <a href="mailto:crosschat.app@gmail.com">crosschat.app@gmail.com</a>.</p>
+
+<h2>Option 1: Chrome Web Store (recommended, auto-updates)</h2>
+<p>Requires Chrome 110+ and a network that can reach the Chrome Web Store.</p>
+<ol class="steps">
+  <li>Open the <a href="https://chromewebstore.google.com/detail/crosschat-%E2%80%94-ai-customer-r/kglojbdkalmohpgcpobpknhdoidpclkh" target="_blank" rel="noopener">CrossChat store listing</a> and click “Add to Chrome”.</li>
+  <li>The first-run page opens automatically: try the 30-second offline demo, then add customer-service sites as needed.</li>
+  <li>Store installs update automatically.</li>
+</ol>
+
+<h2>Option 2: Microsoft Edge</h2>
+<p>The Edge Add-ons submission is under review; this page will link it once published. Meanwhile you can either enable “Allow extensions from other stores” at <code>edge://settings/system</code> and install from the Chrome Web Store (store must still be reachable), or use Option 3, which works in Edge as well.</p>
+
+<h2 id="offline-en">Option 3: Offline install (unpacked extension in developer mode)</h2>
+<div class="note info">Chrome no longer allows side-loading .crx files, so offline installs use “Load unpacked”. This path <strong>does not auto-update</strong>; replace the folder contents manually for new versions (overwriting the same folder keeps your settings).</div>
+<ol class="steps">
+  <li>Get the package: on <a href="https://github.com/shizhi3620/crosschat" target="_blank" rel="noopener">github.com/shizhi3620/crosschat</a> use the green “Code” button → “Download ZIP”, or download <a href="https://github.com/shizhi3620/crosschat/archive/refs/heads/main.zip" target="_blank" rel="noopener">crosschat-main.zip</a> directly. Everything needed to load it (including the prebuilt injected script) is in the repo — <strong>no Node install or build step required</strong>.</li>
+  <li>Unzip into a <strong>permanent folder</strong> (do not delete or move it afterwards); you should see <code>manifest.json</code> and a <code>src/</code> folder inside.</li>
+  <li>Open <code>chrome://extensions</code> (<code>edge://extensions</code> in Edge) and enable “Developer mode” (top-right).</li>
+  <li>Click “Load unpacked” and select the folder containing <code>manifest.json</code>.</li>
+  <li>The CrossChat icon appears. The “developer-mode extensions” browser warning is a normal Chrome safety notice.</li>
+</ol>
+
+<h2 id="byok-en">Bring your own Volcengine Ark key (three steps)</h2>
+<p>The offline demo works without a key; configure BYOK only when you want real AI drafts. The key is stored solely in your local <code>chrome.storage.local</code>; requests go browser-to-Ark (Beijing) through no server of ours.</p>
+<ol class="steps">
+  <li>Register and complete identity verification at the Ark console: <a href="https://console.volcengine.com/ark" target="_blank" rel="noopener">console.volcengine.com/ark</a>.</li>
+  <li>Enable the models under “Online inference”: defaults are the lightweight <code>doubao-seed-2-0-mini</code> (L1: translation and routine replies) and <code>doubao-seed-2-1-pro</code> (L2: disputes and strongly negative messages only). Copy the model/endpoint IDs into the L1 and L2 fields.</li>
+  <li>Create an API key under “API Key management”, paste it into the options page, and click “<strong>Test connection</strong>” — it tests the form values <strong>without saving</strong> and never overwrites your saved setup on failure. Save only after the test passes.</li>
+</ol>
+<div class="note ok">Cost: post-paid on your own Volcengine account; the extension charges nothing. At the built-in cost model (2026-10-15 official prices), typical support traffic is roughly ¥3.7–¥73.5 per 1,000 conversations depending on mix (≈¥17.7 at ~60% cache hits). The <a href="https://docs.volcengine.com/docs/ark/model-pricing" target="_blank" rel="noopener">Ark price list</a> and your bill are authoritative.</div>
+
+<h3>Test-connection errors</h3>
+<ul>
+  <li><strong>401</strong>: invalid or mistyped API key. Recopy it from “API Key management” — it is an Ark API key, not your main Volcengine AccessKey.</li>
+  <li><strong>403</strong>: identity verification incomplete, insufficient balance, or the key lacks access to the selected model.</li>
+  <li><strong>404</strong>: Base URL/model ID mismatch. The default Base URL is <code>https://ark.cn-beijing.volces.com/api/v3</code>; the model ID must exactly match one enabled in “Online inference”.</li>
+  <li><strong>429</strong>: rate limit or quota exhausted — retry later or check Ark quota.</li>
+  <li><strong>Timeout / network</strong>: check network and proxies (the Beijing endpoint is usually direct in mainland China; overseas proxies may break it) and allow <code>ark.cn-beijing.volces.com</code> through corporate firewalls.</li>
+</ul>
+
+<h2>First 30 seconds</h2>
+<ol class="steps">
+  <li>Open the demo from the first-run page and walk through capture → translate/draft → compliance &amp; PII checks → adopt.</li>
+  <li>Add and authorize the seller-backend / CRM / webmail domains you actually use — nothing is injected on sites you don’t grant.</li>
+  <li>On a real support page, select a buyer message and click the toolbar icon. <strong>The extension only ever fills a draft; you click the platform’s send button.</strong></li>
+</ol>
+<div class="note info">Demo placeholders are shown with a red “do not send” warning and cannot be adopted into a reply box; adoptable content appears only after a real key is configured.</div>
+
+<p>More answers in the <a href="support.html">FAQ</a>; data handling is described in the <a href="privacy.html">Privacy Policy</a>.</p>
+</div>
+</div>
+
+<footer><div class="container">
+  <span>© 2026 shizhi3620</span>
+  <a href="privacy.html" class="zh">隐私政策</a><a href="privacy.html" class="en">Privacy</a>
+  <a href="terms.html" class="zh">服务条款</a><a href="terms.html" class="en">Terms</a>
+  <a href="support.html">FAQ</a>
+  <span class="right">v1.0.1</span>
+</div></footer>
+</body>
+<script src="assets/lang.js"></script>
+</html>

@@ -1,5 +1,5 @@
 /**
- * 匿名遥测隐私护栏单测（v1.0.0 隐私设计）。
+ * 匿名遥测隐私护栏单测（v1.0.1：客户端无 secret、中转架构，评审 P1-6）。
  */
 import { test, ok, eq } from './harness.mjs';
 import {
@@ -7,7 +7,7 @@ import {
   classifyPlatform,
   sanitizeParams,
   isConfigured,
-  sendToGa,
+  sendToRelay,
   ALLOWED_EVENTS,
   ALLOWED_PARAM_VALUES,
 } from '../src/core/telemetry.js';
@@ -17,7 +17,7 @@ function memStore() {
   const m = new Map();
   return { m, async get(k, f) { return m.has(k) ? m.get(k) : (f ?? null); }, async set(k, v) { m.set(k, v); } };
 }
-const REAL_CFG = { endpoint: TELEMETRY.endpoint, measurementId: 'G-TEST1234', apiSecret: 'secret-x' };
+const REAL_CFG = { endpoint: 'https://relay.example.com/collect', measurementId: 'G-TEST1234' };
 
 function makeTelemetry({ cfg = REAL_CFG, store = memStore(), now = 0, sends = [] } = {}) {
   const t = new Telemetry({
@@ -29,6 +29,22 @@ function makeTelemetry({ cfg = REAL_CFG, store = memStore(), now = 0, sends = []
   });
   return { t, store, sends, setNow: (ms) => { now = ms; } };
 }
+
+test('遥测: 出厂配置停发——endpoint 为空，零外呼（P1-6）', () => {
+  eq(TELEMETRY.endpoint, '');
+  ok(!('apiSecret' in TELEMETRY), '配置对象里不应再有 apiSecret 字段');
+  ok(!isConfigured(TELEMETRY));
+});
+
+test('遥测: isConfigured 拒绝直连 GA / 非 https / 空端点 / 异常 measurementId', () => {
+  ok(isConfigured(REAL_CFG));
+  ok(!isConfigured({ ...REAL_CFG, endpoint: 'https://www.google-analytics.com/mp/collect' }), '禁止直连 GA');
+  ok(!isConfigured({ ...REAL_CFG, endpoint: 'http://relay.example.com/collect' }), '必须 https');
+  ok(!isConfigured({ ...REAL_CFG, endpoint: '' }));
+  ok(!isConfigured({ ...REAL_CFG, endpoint: 'not a url' }));
+  ok(!isConfigured({ ...REAL_CFG, measurementId: 'X-1' }));
+  ok(!isConfigured({ ...REAL_CFG, measurementId: 'G-XXXXXXXXXX' }));
+});
 
 test('遥测: platform 粗分类只到平台级，不保留主机名', () => {
   eq(classifyPlatform('seller-us.tiktok.com'), 'tiktok');
@@ -60,14 +76,6 @@ test('遥测: 白名单外事件名不存在可乘之机', () => {
   ok(!Object.prototype.hasOwnProperty.call(ALLOWED_EVENTS, 'purchase'));
   ok(ALLOWED_EVENTS.draft_adopted.has('level'));
   ok(ALLOWED_PARAM_VALUES.platform_class.size === 5);
-});
-
-test('遥测: 占位符配置（开发/未打包）不发送', async () => {
-  const { t, sends } = makeTelemetry({ cfg: TELEMETRY });
-  ok(isConfigured(REAL_CFG));
-  ok(!isConfigured(TELEMETRY));
-  eq(await t.track('install'), false);
-  eq(sends.length, 0);
 });
 
 test('遥测: opt-out 后零请求（install/daily/draft 全部不发）', async () => {
@@ -103,7 +111,7 @@ test('遥测: sender 抛错时静默失败，不冒泡到业务链路', async ()
   eq(await t.trackDailyActive(), false);
 });
 
-test('遥测: GA 非 2xx 抛错且请求 URL/Body 正确', async () => {
+test('遥测: 中转非 2xx 抛 Relay 错误；请求不含任何 secret（P1-6）', async () => {
   let calledUrl = null;
   let calledInit = null;
   const fetchImpl = async (url, init) => {
@@ -112,15 +120,15 @@ test('遥测: GA 非 2xx 抛错且请求 URL/Body 正确', async () => {
     return { ok: false, status: 500 };
   };
   try {
-    await sendToGa({ cfg: REAL_CFG, clientId: 'cid', name: 'install', params: {}, fetchImpl });
+    await sendToRelay({ cfg: REAL_CFG, clientId: 'cid', name: 'install', params: {}, fetchImpl });
     throw new Error('should have thrown');
   } catch (e) {
-    ok(/GA 500/.test(e.message), '应抛 GA 500');
+    ok(/Relay 500/.test(e.message), '应抛 Relay 500');
   }
-  ok(calledUrl.startsWith(`${REAL_CFG.endpoint}?measurement_id=G-TEST1234&api_secret=secret-x`));
-  eq(JSON.parse(calledInit.body), { client_id: 'cid', events: [{ name: 'install', params: {} }] });
-  ok(!isConfigured({ ...REAL_CFG, measurementId: 'X-1' }));
-  ok(!isConfigured({ ...REAL_CFG, apiSecret: '__SET_AT_PACKAGING__' }));
+  eq(calledUrl, REAL_CFG.endpoint);
+  const body = JSON.parse(calledInit.body);
+  eq(body, { measurement_id: 'G-TEST1234', client_id: 'cid', events: [{ name: 'install', params: {} }] });
+  ok(!/api_secret|apiSecret|secret/i.test(`${calledUrl}\n${calledInit.body}`), '客户端请求中不得出现 secret');
 });
 
 test('遥测: daily_active 每 UTC 日至多一条，跨天恢复', async () => {

@@ -116,18 +116,51 @@ $('#grantHost').addEventListener('click', async () => {
   $('#connStatus').textContent = granted ? `已授权 ${origin}` : '未授权，BYOK 调用将被浏览器拦截';
 });
 
-$('#testKey').addEventListener('click', async () => {
+/** 从 BYOK 表单读取临时 ark 配置（不经过保存、不写 storage），供「测试连接」即填即测 */
+function draftArkFromForm() {
+  const draft = { models: {} };
+  document.querySelectorAll('input[data-k]').forEach((input) => {
+    const k = input.dataset.k;
+    if (!k.startsWith('ark.')) return;
+    if (input.type === 'number') {
+      if (input.value === '') return;
+      const n = Number(input.value);
+      if (Number.isFinite(n)) draft[k.slice(4)] = n; // ark.timeoutMs -> timeoutMs
+      return;
+    }
+    const v = input.value.trim();
+    if (k === 'ark.models.l1') draft.models.l1 = v;
+    else if (k === 'ark.models.l2') draft.models.l2 = v;
+    else draft[k.slice(4)] = v; // ark.baseUrl / ark.apiKey
+  });
+  return draft;
+}
+
+$('#testKey').addEventListener('click', () => {
+  const base = document.querySelector('input[data-k="ark.baseUrl"]').value.trim();
+  try {
+    new URL(base);
+  } catch {
+    $('#connStatus').className = 'err';
+    $('#connStatus').textContent = 'Base URL 不合法：应为 https://ark.cn-beijing.volces.com/api/v3';
+    return;
+  }
   $('#connStatus').className = 'muted';
-  $('#connStatus').textContent = '测试中…';
-  await onSave();
-  chrome.runtime.sendMessage({ type: 'crosschat:testKey' }, (resp) => {
+  $('#connStatus').textContent = '测试中（使用表单当前值，不会保存）…';
+  // P0-3：不先保存、不覆盖已存配置；失败原因已在后台归因为中文
+  chrome.runtime.sendMessage({ type: 'crosschat:testKey', draft: draftArkFromForm() }, (resp) => {
+    if (chrome.runtime.lastError) {
+      $('#connStatus').className = 'err';
+      $('#connStatus').textContent = `失败：${chrome.runtime.lastError.message}`;
+      return;
+    }
     if (!resp?.ok) {
       $('#connStatus').className = 'err';
-      $('#connStatus').textContent = `失败：${resp?.error || chrome.runtime.lastError?.message}`;
+      $('#connStatus').textContent = resp?.error || '测试失败';
       return;
     }
     $('#connStatus').className = 'ok';
-    $('#connStatus').textContent = `OK：模型 ${resp.data.model}，用量 ${JSON.stringify(resp.data.usage)}`;
+    $('#connStatus').textContent = `测试通过：模型 ${resp.data.model} 正常响应（${resp.data.usage.prompt || 0}/${resp.data.usage.completion || 0} tokens）。点「保存全部设置」后正式生效。`;
   });
 });
 

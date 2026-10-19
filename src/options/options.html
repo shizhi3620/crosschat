@@ -24,9 +24,18 @@
       </div>
       <div class="row">
         <button id="grantHost">为自定义 Base URL 授权跨域访问</button>
-        <button id="testKey">测试连接（消耗极少 token）</button>
+        <button id="testKey">测试连接（不保存，即填即测）</button>
         <span id="connStatus" class="muted"></span>
       </div>
+      <details class="guide">
+        <summary>还没有方舟 Key？三步开通（点我展开图文指引）</summary>
+        <ol>
+          <li>注册并<b>实名认证</b>火山引擎，打开方舟控制台：<a href="https://console.volcengine.com/ark" target="_blank" rel="noopener">console.volcengine.com/ark</a>（北京节点，国内直连）。</li>
+          <li>在「在线推理」里开通要用的模型（默认轻量 <code>doubao-seed-2-0-mini</code> 做翻译/常规回复，旗舰 <code>doubao-seed-2-1-pro</code> 只处理纠纷/差评），把模型或接入点 ID 分别填到上面 L1/L2 输入框。</li>
+          <li>在「API Key 管理」创建 Key，粘进上方 API Key 框，点「测试连接」——<b>不用先保存</b>，通过后再点页面底部「保存全部设置」。费用按你自己的方舟账户后付费，参考<a href="https://docs.volcengine.com/docs/ark/model-pricing" target="_blank" rel="noopener">官方价目表</a>：典型客服场景每千条对话估算约 ¥3.7（无缓存）～¥17.7（六成缓存命中）。</li>
+        </ol>
+        <div class="muted">常见报错：401 = Key 错误；403 = 未实名/欠费/模型未授权；404 = Base URL 或模型 ID 不一致；超时 = 网络/代理问题。完整安装教程见官网「安装教程」页。</div>
+      </details>
     </section>
 
     <section>
@@ -90,11 +99,12 @@
       <h2>7. 隐私与匿名使用统计</h2>
       <label class="cb" style="padding-top:0">
         <input id="telemetryEnabled" type="checkbox" />
-        发送匿名使用统计（帮助判断产品是否有用，默认开启，可随时关闭）
+        恢复匿名统计后允许发送（当前 v1.0.1 统计通道处于停发状态，勾不勾选都不会有统计外呼）
       </label>
       <div class="muted" style="margin-top:6px">
-        仅含：安装、每日活跃、草拟/采纳计数、模型级别（L0/L1/L2）、平台大类（如 shopee/tiktok/other，不含完整域名）、运行模式（demo/byok）。
-        <b>不含</b>消息正文、买家信息、完整网址、页面标题或 API Key。关闭后不产生任何统计请求。
+        v1.0.0 直连 Google Analytics 的做法会让统计密钥随安装包公开，v1.0.1 已移除：在官方自建匿名中转上线前，扩展不发送任何统计请求。
+        恢复后也仅含：安装、每日活跃、草拟/采纳计数、模型级别（L0/L1/L2）、平台大类（如 shopee/tiktok/other，不含完整域名）、运行模式（demo/byok）；
+        <b>不含</b>消息正文、买家信息、完整网址、页面标题或 API Key，并可随时用上面的开关关闭。
       </div>
       <div id="telemetryState" class="muted" style="margin-top:6px"></div>
     </section>

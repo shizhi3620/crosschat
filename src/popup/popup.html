@@ -18,8 +18,14 @@
     <div class="kpi"><span id="kpiResp">–s</span><label>首响中位数</label></div>
   </section>
 
+  <div id="emptyHint" class="muted hidden">
+    还没有处理记录，看板和指标是空的——先点「打开演示页面」跑一条演示，
+    或在已启用的站点上捕获一条买家消息。
+    <button id="openDemoHint" class="linkish">打开演示页面 →</button>
+  </div>
+
   <section>
-    <label for="quotaBar">本月配额（全部店铺合计）</label>
+    <label for="quotaBar">本月配额进度（按用量最高的单店展示，非全店合计）</label>
     <div class="bar"><div id="quotaBar" class="fill normal"></div></div>
     <div id="quotaText" class="muted">—</div>
   </section>

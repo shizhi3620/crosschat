@@ -3,6 +3,7 @@
  * 两级：block（禁止填入/必须改）、warn（可发送但提示风险）。
  * 覆盖：外链、联系方式、索评利诱（中英文）、站外支付导流、Amazon 主动消息规则。
  */
+import { PHONE_REGEXES } from './pii.js';
 
 export const SEVERITY = { BLOCK: 'block', WARN: 'warn' };
 
@@ -75,13 +76,13 @@ const RULES = [
     id: 'contact_phone_email',
     severity: SEVERITY.BLOCK,
     message: '草稿中包含电话/邮箱，平台消息内禁止留下直接联系方式。',
-    // 与 pii.js 同形：邮箱 + 各国电话号码（含中国手机号/美式/带国家码）
+    // 与 pii.js 同形：邮箱 + 各国电话号码（正则集合复用，含 VN/BR/TH/ID，P1-3）
     test(text) {
       const hits = new Set();
       for (const m of text.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) hits.add(m[0]);
-      for (const m of text.matchAll(/(?<!\d)1[3-9]\d{9}(?!\d)/g)) hits.add(m[0]);
-      for (const m of text.matchAll(/(?:\+?1[-.\s])?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}(?![\d-])/g)) hits.add(m[0]);
-      for (const m of text.matchAll(/\+\d{1,3}[-.\s]?\d{2,4}[-.\s]?\d{2,4}[-.\s]?\d{2,4}/g)) hits.add(m[0]);
+      for (const re of PHONE_REGEXES) {
+        for (const m of text.matchAll(re)) hits.add(m[0]);
+      }
       return [...hits];
     },
   },
@@ -108,13 +109,25 @@ const RULES = [
   {
     id: 'offsite_payment',
     severity: SEVERITY.BLOCK,
-    message: '检测到站外支付导流（PayPal/支付宝/西联等），绕开平台支付违反规则并有欺诈风险。',
+    message: '检测到站外支付导流（PayPal/支付宝/西联/ZaloPay/Pix 等本地钱包），绕开平台支付违反规则并有欺诈风险。',
     test(text) {
       const patterns = [
         /\bpay\s?pal\b/gi, /\bpaypal\.me\b/gi, /支付宝|支\s*付\s*宝|alipay/gi,
         /\bvenmo\b/gi, /\bcash\s?app\b/gi, /\bzelle\b/gi, /\bwise(?:\.com)?\b/gi,
         /western\s*union|西联(?:汇款)?/gi, /微信支付|wechat\s*pay/gi,
         /bank\s*transfer|wire\s*transfer|tt\s*(?:payment|transfer)|银行转账|线下转账|汇款到(?:账?户)?/gi,
+        // 评审 P1-4：东南亚/南美本地钱包与转账（卖家母语草稿，平台同样禁止绕支付）
+        /\bzalo\s*pay\b/gi, // 注意：联系渠道规则里的 \bzalo\b 匹配不到 zalopay，必须单列
+        /\b(?:vi\s*)?momo\b/gi, /chuyển\s*khoản|chuyen\s*khoan/gi,
+        /\bgo[-\s]?pay\b/gi, /\btrue[-\s]?money\b/gi, /\bprompt[-\s]?pay\b/gi,
+        // OVO/DANA 过于普通（葡萄牙语 ovo=鸡蛋、Dana 可作人名），要求支付语境
+        /\b(?:pagar|bayar|pay(?:ment)?|via|pakai|lewat)\s+(?:com|no|pelo)?\s*ovo\b/gi,
+        /\bovo\s+wallet\b/gi,
+        /\b(?:via|pakai|lewat|bayar(?:\s+lewat)?)\s+dana\b/gi,
+        /\bdana\s+(?:wallet|id)\b/gi,
+        // 巴西 Pix：裸 pix 太宽，要求支付语境或键类型词
+        /\b(?:chave\s+)?pix\b\s*(?:cpf|email|e-mail|telefone|celular|chave|key|copia|copia)/gi,
+        /\b(?:pagar|pagamento|pague|via|pelo|fazer\s+um|receber\s+pelo?)\s+pix\b/gi,
       ];
       const hits = new Set();
       for (const re of patterns) for (const m of text.matchAll(re)) hits.add(m[0]);

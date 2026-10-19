@@ -15,6 +15,7 @@ test('端到端: 演示模式 FAQ 物流咨询 → L0 零 Token + 知识库引�
   ok(r.references.includes('shipping-time'));
   eq(r.compliance.verdict, 'pass');
   ok(r.draft.length > 20);
+  eq(r.placeholder, false, 'L0 FAQ 是卖家自有知识库模板，即使演示模式也不是占位内容');
   eq(r.event.kind, 'generate');
   eq(r.event.level, 'L0');
 });
@@ -27,6 +28,7 @@ test('端到端: A-to-Z 纠纷 → L2；售后模板不违规', async () => {
   eq(r.level, 'L2');
   ok(r.risk.dispute);
   eq(r.compliance.verdict, 'pass');
+  eq(r.placeholder, true, '演示引擎 L2 草稿是占位内容，界面必须禁采纳（P1-5）');
 });
 
 test('端到端: 翻译任务永远 L1', async () => {
@@ -37,6 +39,7 @@ test('端到端: 翻译任务永远 L1', async () => {
   });
   eq(r.level, 'L1');
   ok(r.translated.includes('订单') || r.translated.includes('演示模式'));
+  eq(r.placeholder, true, '演示译文同样不可采纳外发（P1-5）');
 });
 
 function spyArk(payloads = []) {
@@ -76,6 +79,7 @@ test('端到端: BYOK 模式入模文本已 PII 脱敏（原文不进入 prompt�
   eq(r.entities[0].type, 'EMAIL');
   eq(spy.calls[0].maxTokens, config.costControl.maxOutputTokens);
   eq(r.model, 'spy-model');
+  eq(r.placeholder, false, 'BYOK 正常返回不是占位内容');
 });
 
 test('端到端: 模型草稿含 PayPal 站外支付 → 合规 block，不提供自动发送路径', async () => {
@@ -118,6 +122,7 @@ test('端到端: Ark 报错时返回 error 且不产生计量计费事件', asyn
     clients: { ark: { async chat() { throw new Error('Ark API 401'); } } },
   });
   ok(r.error.includes('401'), r.error);
+  eq(r.placeholder, true, 'API 失败的空草稿必须按占位处理（P1-5）');
   eq(r.event.tokens.prompt, 0);
   eq(r.event.tokens.completion, 0);
 });

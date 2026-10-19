@@ -25,6 +25,7 @@ body {
 }
 a { color: var(--blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
+.muted { color: var(--muted); }
 .container { max-width: 920px; margin: 0 auto; padding: 0 20px; }
 
 /* 语言切换 */

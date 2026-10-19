@@ -1,7 +1,9 @@
 /**
  * 页面浮动部件：手动捕获买家消息 → 后台分级处理 → 展示翻译/草稿与合规结果
  * → 人工点「采纳并填入发送框」。任何情况下都不自动发送。
- * 在真实站点由 content-loader 动态导入；在扩展内 demo 页直接以 module 引入。
+ * 真实站点注入使用打包后的经典脚本 src/content/content.bundle.js
+ * （scripts/bundle-content.mjs 生成，无需 web_accessible_resources）；
+ * 扩展内 demo 页直接以 ESM module 引入本文件。
  */
 import { restoreDraft } from '../core/pii.js';
 import { fillDraft, captureSelection, captureConversation, pickAdapter } from './adapters.js';
@@ -60,6 +62,10 @@ button.danger:disabled { background: #ccc; border-color: #ccc; cursor: not-allow
 .ok { color: #116329; }
 .err { color: #82071e; }
 .hidden { display: none; }
+/* 演示/失败占位文本：红底明示「切勿外发」，并禁止采纳（P1-5） */
+textarea.placeholder-output { background: #ffebe9; border-color: #ffabab; color: #82071e; }
+.placeholder-warn { border-radius: 6px; padding: 6px 8px; font-size: 11px; line-height: 1.5;
+  background: #ffebe9; border: 1px solid #ffabab; color: #82071e; font-weight: 600; }
 `;
 
 const HTML = `
@@ -90,6 +96,7 @@ const HTML = `
       <textarea id="output" rows="6"></textarea>
       <div id="refs" class="refs"></div>
       <div id="piiNote" class="note"></div>
+      <div id="placeholderNote" class="placeholder-warn hidden"></div>
       <div class="row">
         <button id="adopt" class="primary">采纳并填入发送框</button>
         <button id="copy">复制文案</button>
@@ -176,6 +183,22 @@ class Widget {
     this.$('#output').value = r.draft || '';
     this.$('#refs').textContent = r.references?.length ? `引用：${r.references.map((x) => `[KB:${x}]`).join(' ')}` : '';
 
+    // P1-5：演示占位 / 接口失败均不得进入发送框。L0 知识库模板（placeholder=false）照常可采纳。
+    const outputEl = this.$('#output');
+    const noteEl = this.$('#placeholderNote');
+    let placeholderMsg = '';
+    if (r.error) {
+      placeholderMsg = '生成失败，未产生可用文案。请检查 API Key / 网络后重试——不要把空结果或报错内容外发给买家。';
+    } else if (r.placeholder) {
+      placeholderMsg = location.protocol === 'chrome-extension:'
+        ? '这是演示模式的占位内容，只用于体验界面，不是真实 AI 输出，不可填入发送框。'
+        : '演示模式占位内容：未配置 Ark Key 前不可填入发送框，也切勿直接外发给买家。请先到设置页配置 BYOK。';
+    }
+    this.placeholderBlocked = Boolean(placeholderMsg);
+    noteEl.textContent = placeholderMsg;
+    noteEl.classList.toggle('hidden', !placeholderMsg);
+    outputEl.classList.toggle('placeholder-output', this.placeholderBlocked && Boolean(outputEl.value));
+
     const findingsEl = this.$('#findings');
     findingsEl.innerHTML = '';
     for (const f of r.compliance?.findings || []) {
@@ -186,14 +209,22 @@ class Widget {
     }
 
     const adoptBtn = this.$('#adopt');
+    adoptBtn.classList.remove('danger');
     if (r.blocked) {
       adoptBtn.disabled = true;
       adoptBtn.textContent = '合规拦截：请修改后重拟';
       adoptBtn.classList.add('danger');
+      adoptBtn.title = '命中平台合规阻断规则，修改文案后重新草拟再采纳';
+    } else if (this.placeholderBlocked) {
+      adoptBtn.disabled = true;
+      adoptBtn.textContent = r.error ? '生成失败：无可采纳文案' : '占位内容不可采纳';
+      adoptBtn.title = r.error
+        ? '接口报错时没有可填入的文案，请修复后重试'
+        : '演示占位内容不是真实回复，配置 Ark Key 后才能填入发送框';
     } else {
       adoptBtn.disabled = false;
       adoptBtn.textContent = '采纳并填入发送框';
-      adoptBtn.classList.remove('danger');
+      adoptBtn.title = '';
     }
 
     const entCount = r.entities?.length || 0;
@@ -221,7 +252,8 @@ class Widget {
 
   async onAdopt() {
     const r = this.lastResult;
-    if (!r || r.blocked) return;
+    // 双保险：即使按钮状态被改动，合规拦截 / 占位内容也不进入发送框（P1-5）
+    if (!r || r.blocked || r.error || r.placeholder) return;
     const edited = this.$('#output').value;
     const restored = restoreDraft(edited, r.entities || []);
     const out = fillDraft(restored, {});

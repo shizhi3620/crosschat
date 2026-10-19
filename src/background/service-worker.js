@@ -1,12 +1,12 @@
 /**
  * CrossChat MV3 background service worker（module）。
  * 职责：消息总线、Ark 调用（从 SW 发出以规避页面 CORS）、计量持久化、安装播种、
- * 用户自选站点动态注入（v1.0.0 权限收敛）、匿名遥测、等待名单。
+ * 用户自选站点动态注入（v1.0.0 权限收敛）、匿名遥测（v1.0.1 起默认停发，待中转）。
  */
 import { getConfig, saveConfig, getMeterEvents, appendMeterEvent, localStore } from '../core/storage.js';
 import { STORAGE_KEYS } from '../core/defaults.js';
 import { runPipeline } from '../core/pipeline.js';
-import { createArkClient } from '../core/ark-client.js';
+import { createArkClient, describeArkError } from '../core/ark-client.js';
 import { makeAdoptEvent } from '../core/metering.js';
 import { monthKey, monthlyTokens, monthlyL2Share, quotaPhase } from '../core/quota.js';
 import { summarize } from '../core/metering.js';
@@ -76,6 +76,24 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   // 安装/更新后都对齐一次动态脚本（浏览器更新后状态可能漂移）
   syncContentScripts().catch((e) => console.warn('[CrossChat] content script reconcile failed', e));
 });
+
+/**
+ * 「不保存即测」用：只挑取 ark 命名空间下的已知字段合并，避免消息内容污染整个配置。
+ */
+function mergeDraftArk(stored, draft) {
+  const ark = { ...stored.ark, models: { ...(stored.ark.models || {}) } };
+  if (typeof draft.baseUrl === 'string' && draft.baseUrl.trim()) ark.baseUrl = draft.baseUrl.trim();
+  if (typeof draft.apiKey === 'string' && draft.apiKey.trim()) ark.apiKey = draft.apiKey.trim();
+  if (Number.isFinite(Number(draft.timeoutMs)) && draft.timeoutMs !== null && draft.timeoutMs !== '') {
+    ark.timeoutMs = Math.min(120000, Math.max(2000, Number(draft.timeoutMs)));
+  }
+  if (draft.models && typeof draft.models === 'object') {
+    for (const k of ['l1', 'l2']) {
+      if (typeof draft.models[k] === 'string' && draft.models[k].trim()) ark.models[k] = draft.models[k].trim();
+    }
+  }
+  return { ...stored, ark };
+}
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (!msg || typeof msg !== 'object' || !String(msg.type || '').startsWith('crosschat:')) {
@@ -171,17 +189,29 @@ async function handle(msg) {
     }
 
     case 'crosschat:testKey': {
-      const config = await getConfig();
+      // 「不保存即测」（评审 P0-3）：options 把表单当前值作为 draft 发来，
+      // 与已存储配置合并后仅用于本次探测，绝不回写；测试失败不会污染已存配置。
+      const stored = await getConfig();
+      const config = msg.draft && typeof msg.draft === 'object'
+        ? mergeDraftArk(stored, msg.draft)
+        : stored;
+      if (!config.ark?.apiKey) {
+        throw new Error('还没有填写 API Key：先把火山方舟的 Key 粘进输入框（不用先保存），再点测试。');
+      }
       const client = createArkClient(config);
-      const resp = await client.chat({
-        level: 'L1',
-        messages: [
-          { role: 'system', content: 'Reply with JSON only.' },
-          { role: 'user', content: 'Return {"ok":true}' },
-        ],
-        maxTokens: 16,
-      });
-      return { model: resp.model, usage: resp.usage };
+      try {
+        const resp = await client.chat({
+          level: 'L1',
+          messages: [
+            { role: 'system', content: 'Reply with JSON only.' },
+            { role: 'user', content: 'Return {"ok":true}' },
+          ],
+          maxTokens: 16,
+        });
+        return { model: resp.model, usage: resp.usage };
+      } catch (e) {
+        throw new Error(describeArkError(e));
+      }
     }
 
     case 'crosschat:resetMeter': {
@@ -208,20 +238,6 @@ async function handle(msg) {
 
     case 'crosschat:sites:reconcile': {
       return syncContentScripts();
-    }
-
-    // ---- 托管体验额度等待名单（邮箱仅存本机） ----
-    case 'crosschat:waitlist:join': {
-      const email = String(msg.email || '').trim().toLowerCase();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200) {
-        throw new Error('邮箱格式不正确');
-      }
-      const list = (await localStore.get(STORAGE_KEYS.waitlist, [])) || [];
-      if (!list.some((x) => x.email === email)) {
-        list.push({ email, at: Date.now() });
-        await localStore.set(STORAGE_KEYS.waitlist, list);
-      }
-      return { joined: true, count: list.length };
     }
 
     default:

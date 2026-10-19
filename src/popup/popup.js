@@ -37,6 +37,10 @@ async function render() {
   $('lvlL1').textContent = s.levelCounts.L1 || 0;
   $('lvlL2').textContent = s.levelCounts.L2 || 0;
 
+  // 空数据引导：零处理记录时告诉用户先去哪跑第一条（P1-9）
+  const totalRuns = (s.levelCounts.L0 || 0) + (s.levelCounts.L1 || 0) + (s.levelCounts.L2 || 0);
+  $('emptyHint').classList.toggle('hidden', totalRuns > 0);
+
   // 配额按最紧张的店铺展示
   const quota = config.costControl.monthlyQuotaTokens;
   let maxRatio = 0;
@@ -55,6 +59,8 @@ $('openDashboard').addEventListener('click', () =>
   chrome.tabs.create({ url: chrome.runtime.getURL('src/dashboard/dashboard.html') }));
 $('openOptions').addEventListener('click', () => chrome.runtime.openOptionsPage());
 $('openDemo').addEventListener('click', () =>
+  chrome.tabs.create({ url: chrome.runtime.getURL('src/demo/demo.html') }));
+$('openDemoHint')?.addEventListener('click', () =>
   chrome.tabs.create({ url: chrome.runtime.getURL('src/demo/demo.html') }));
 
 render().catch((e) => {

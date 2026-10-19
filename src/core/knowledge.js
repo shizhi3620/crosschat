@@ -11,11 +11,15 @@ const STOPWORDS = new Set([
   '吗', '呢', '的话', '请问', '一下', '怎么', '如何', '多少', '为什么',
 ]);
 
-/** 兼容中英文的 token 化：拉丁词 + 中文二元组 */
+/**
+ * 兼容多语种的 token 化（评审 P1-2）：拉丁/西里尔字母词 + 数字 + 中文二元组。
+ * 用 Unicode Script 而非 a-z：越南语元音符号（đơn/hàng）、葡语 ã/ç（não/prazo）
+ * 旧正则会直接吞掉，导致越南/巴西买家问句的关键词全部丢失、L0 命不中。
+ */
 export function tokenize(text) {
   const normalized = String(text ?? '').toLowerCase();
   const tokens = [];
-  const latin = normalized.match(/[a-z0-9]+('[a-z]+)?/g) || [];
+  const latin = normalized.match(/[\p{Script=Latin}\p{Script=Cyrillic}\p{N}]+(?:['’][\p{Script=Latin}\p{Script=Cyrillic}]+)?/gu) || [];
   for (const w of latin) {
     if (!STOPWORDS.has(w) && w.length > 1) tokens.push(w);
   }
